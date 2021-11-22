@@ -9,8 +9,8 @@ Django==3.2.9
 django-allauth==0.46.0
 django-filter==21.1
 djangorestframework==3.12.4
-djangorestframework-jwt==1.11.0
-djangorestframework-simplejwt==5.0.0
+djangorestframework-jwt
+djangorestframework-simplejw
 idna==3.3
 importlib-metadata==4.8.2
 Markdown==3.3.6
