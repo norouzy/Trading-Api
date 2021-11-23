@@ -137,8 +137,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
 
     'DEFAULT_PERMISSION_CLASSES': [
-        # 'rest_framework.permissions.IsAuthenticated',
-        'api.permissions.IsStaffOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
+        # 'api.permissions.IsStaffOrReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
@@ -150,4 +150,4 @@ REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'access'
 JWT_AUTH_REFRESH_COOKIE = 'refresh'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    
