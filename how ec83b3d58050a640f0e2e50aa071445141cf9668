@@ -1,0 +1,89 @@
+[33mcommit bddcbfb4c4dadc10eb7760623e6b9689d0a6d00e[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 12:04:11 2021 +0330
+
+    come backe file one level
+
+[33mcommit 52029f474c0428ef505e14d6d87f0c232d79ee62[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 12:00:27 2021 +0330
+
+    req.txt
+
+[33mcommit ec83b3d58050a640f0e2e50aa071445141cf9668[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 11:54:48 2021 +0330
+
+    pcfile
+
+[33mcommit 7d815e174a6460fade4847b359074e0f745088d1[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 11:47:24 2021 +0330
+
+     pcfile
+
+[33mcommit b7593ada133c7aada7e280cd6f3287226a491623[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 11:32:56 2021 +0330
+
+     remove db from ignoring
+
+[33mcommit 626eb524761c1f6817372db373096a3a2cefc118[m
+Author: amir <amirsmvb@yahoo.com>
+Date:   Tue Nov 23 10:31:06 2021 +0330
+
+    deploy files added
+
+[33mcommit 2318a8b948cd7ecedae169c4289b01a668357e71[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 02:35:34 2021 +0330
+
+     remove DISABLE_COLLECTSTATIC=1 in setting
+
+[33mcommit a4d6eb670291912188d876f448b0e594af2658bf[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 02:33:11 2021 +0330
+
+    DISABLE_COLLECTSTATIC=1 in setting
+
+[33mcommit 802e6f963f77e13fbb6358fb2f473264cee0602a[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 02:30:41 2021 +0330
+
+     remove pyjwt version
+
+[33mcommit 11b267e4544c03650c70825eeb6703e7128c8348[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 02:27:35 2021 +0330
+
+     remove pyjwt version
+
+[33mcommit ba3999ec9e83a9f705b31f7cc9fc513ece8b9f3b[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 02:25:40 2021 +0330
+
+     remove pyjwt version
+
+[33mcommit 0af00d7691b11b86e457347ccd14a1cb1c574fc7[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 01:48:20 2021 +0330
+
+    user info and config jwt and rest frameWork
+
+[33mcommit 12fdc5344d9b8c200879ca6d88fcfe670f775d10[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Tue Nov 23 00:06:40 2021 +0330
+
+     change config name
+
+[33mcommit 47c844adbff6bfd5758d977866e69637ba88c741[m
+Author: norouzy <mohamadnewday@gmail.com>
+Date:   Mon Nov 22 23:59:04 2021 +0330
+
+    start project
+
+[33mcommit 30ab4abbaee8baa5efacccf62483b0bde4b060dd[m
+Author: Mohamad Noroozi <77892796+norouzy@users.noreply.github.com>
+Date:   Mon Nov 22 23:53:42 2021 +0330
+
+    Initial commit
