@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .serializers import UserSerializer
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView
 from django.contrib.auth.models import User
 from .permissions import IsSuperUser, IsUser
 # Create your views here.
