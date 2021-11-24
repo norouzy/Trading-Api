@@ -123,6 +123,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+from datetime import timedelta
+
+SIMPLE_JWT = {
+     'ACCESS_TOKEN_LIFETIME': timedelta(weeks=2),
+     'REFRESH_TOKEN_LIFETIME': timedelta(weeks=5),
+
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
