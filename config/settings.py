@@ -53,6 +53,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # Cross Header
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,12 +64,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    # Cross Header
-    'corsheaders.middleware.CorsMiddleware',
 
 ]
 
-# Allow Cross Header
+# Allow Access To All Cross Header
 CORS_ORIGIN_ALLOW_ALL = True
 
 
