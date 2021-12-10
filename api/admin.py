@@ -1,7 +1,7 @@
 #.........
 from django.contrib.auth.models import User
 from django.contrib import admin
-from .models import Paper_trading,Coin_list,Position,Close_info,Position_option
+from .models import *
 # Register your models here.
 
 class positonAdmin(admin.ModelAdmin):
