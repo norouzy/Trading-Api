@@ -1,7 +1,7 @@
 #.........
 from django.contrib.auth.models import User
 from django.contrib import admin
-from .models import paper_trading,coin_list,position,close_info,position_option
+from .models import Paper_trading,Coin_list,Position,Close_info,Position_option
 # Register your models here.
 
 class positonAdmin(admin.ModelAdmin):
@@ -14,7 +14,7 @@ class positonAdmin(admin.ModelAdmin):
 		'oreder_reach_date',
 		'entert_price',
 		)
-admin.site.register(position,positonAdmin)
+admin.site.register(Position,positonAdmin)
 
 class positon_optionAdmin(admin.ModelAdmin):
 	list_display = (
@@ -25,7 +25,7 @@ class positon_optionAdmin(admin.ModelAdmin):
 		'stoploss',
 		'take_profit',
 		)
-admin.site.register(position_option,positon_optionAdmin)
+admin.site.register(Position_option,positon_optionAdmin)
 
 class paper_tradingAdmin(admin.ModelAdmin):
 	list_display = (
@@ -34,7 +34,7 @@ class paper_tradingAdmin(admin.ModelAdmin):
 		'enter_balance',
 		'enter_date'
 		)
-admin.site.register(paper_trading,paper_tradingAdmin)
+admin.site.register(Paper_trading,paper_tradingAdmin)
 
 class close_infoAdmin(admin.ModelAdmin):
 	list_display = (
@@ -42,10 +42,10 @@ class close_infoAdmin(admin.ModelAdmin):
 			'date',
 			'close_price'
 		)
-admin.site.register(close_info,close_infoAdmin)
+admin.site.register(Close_info,close_infoAdmin)
 
 
-admin.site.register(coin_list)
+admin.site.register(Coin_list)
 
 
 

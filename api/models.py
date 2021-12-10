@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-class paper_trading(models.Model):
+class Paper_trading(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="paper_trading", verbose_name="paper trading", blank=True)
 	enter_balance = models.FloatField()
 	balance = models.FloatField()
@@ -12,12 +12,12 @@ class paper_trading(models.Model):
 	def __str__(self):
 		return str(self.user)
 
-class coin_list(models.Model):
+class Coin_list(models.Model):
 	coin = models.CharField(max_length=20)
 	def __str__(self):
 		return self.coin
 
-class position(models.Model):
+class Position(models.Model):
 
 	TRADE_TYPE_CHOISES = (
 			("b","Buy"),
@@ -30,22 +30,22 @@ class position(models.Model):
 		)
 
 
-	user = models.ForeignKey(paper_trading, on_delete=models.CASCADE, related_name="position", verbose_name="position")
+	paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="position", verbose_name="paper_trading")
 	trade_type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="type")
 	amount = models.FloatField(verbose_name="token amount")
 	status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
 	entert_price = models.FloatField()
 	oreder_set_date = models.DateTimeField(auto_now_add=True)
-	oreder_reach_date = models.DateTimeField(default=timezone.now)
-	coin1 = models.ForeignKey(coin_list,models.CASCADE, related_name="coin1")
-	coin2 = models.ForeignKey(coin_list,models.CASCADE, related_name="coin2")
+	oreder_reach_date = models.DateTimeField(blank=True, null=True)
+	coin1 = models.ForeignKey(Coin_list,models.CASCADE, related_name="coin1")
+	coin2 = models.ForeignKey(Coin_list,models.CASCADE, related_name="coin2")
 	
 	def position_name(self):
 		return str(self.user)+"/"+str(self.coin1)+str(self.coin2)
 	def __str__(self):
 		return str(self.user)+"/"+str(self.coin1)+str(self.coin2)
 
-class position_option(models.Model):
+class Position_option(models.Model):
 	TRADE_TYPE_CHOISES = (
 				("t","Take Profit"),
 				("s","Stop loss"),
@@ -59,7 +59,7 @@ class position_option(models.Model):
 			("c","close"),
 		)
 
-	in_position = models.ForeignKey(position, on_delete=models.CASCADE, related_name="in_position", verbose_name="in_position")
+	in_position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name="in_position", verbose_name="in_position")
 	amount = models.FloatField(verbose_name="token amount")
 	status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
 	oreder_reach_date = models.DateTimeField(default=timezone.now,blank=True)
@@ -71,8 +71,8 @@ class position_option(models.Model):
 	def position_name(self):
 		return str(self.in_position.user)+"/"+str(self.in_position.coin1)+str(self.in_position.coin2)
 
-class close_info(models.Model):
-	position = models.ForeignKey(position, on_delete=models.CASCADE, related_name="close_date_position", verbose_name="position", blank=True)
+class Close_info(models.Model):
+	position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name="close_date_position", verbose_name="position", blank=True)
 	date = models.DateTimeField(auto_now_add=True)
 	close_price = models.FloatField()
 	def close_info_name(self):
