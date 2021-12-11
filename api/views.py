@@ -33,7 +33,6 @@ class PositionList(ListAPIView):
 		query = Position.objects.filter(paper_trading__user=user)
 		return query
 
-
 class PositionStatusUpdate(RetrieveUpdateDestroyAPIView):
 	serializer_class = PositionUpdateSerializer
 	permission_classes = (UserPosition,)
@@ -75,7 +74,6 @@ class PositionOption(ListCreateAPIView):
 			position = position.first()
 
 		serializer.save(in_position=position)
-
 
 class PapertradingViewSet(viewsets.ModelViewSet):
 	# queryset = Paper_trading.objects.all()
