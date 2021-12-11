@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path, include
 from .views import *
+from rest_framework import routers
 
 app_name = "api"
 
@@ -13,5 +14,5 @@ urlpatterns = [
 	path('user/positions/create/', PositionCreate.as_view()),
 
 	path('positions/', PositionTotal.as_view()),
-
+	path('paper-trading/', PapertradingListView.as_view()),
 ]
