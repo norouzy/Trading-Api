@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PaperTradingSerializer(serializers.ModelSerializer):
 	user = serializers.ReadOnlyField(source='user.id')
-
+	
 	class Meta:
 		model = Paper_trading
 		fields = "__all__"
