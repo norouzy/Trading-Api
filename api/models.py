@@ -6,8 +6,7 @@ from django.utils import timezone
 
 
 class Paper_trading(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="paper_trading", verbose_name="paper trading",
-                             blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="paper_trading", verbose_name="paper trading",blank=True)
     enter_balance = models.FloatField()
     balance = models.FloatField()
     enter_date = models.DateTimeField(auto_now_add=True)
@@ -34,16 +33,15 @@ class Position(models.Model):
         ("c", "close"),
     )
 
-    paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="position",
-                                      verbose_name="position")
+    paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="position",verbose_name="position")
     trade_type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="type")
     amount = models.FloatField(verbose_name="token amount")
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
     entert_price = models.FloatField()
     oreder_set_date = models.DateTimeField(auto_now_add=True)
     oreder_reach_date = models.DateTimeField(default=timezone.now)
-    coin1 = models.ForeignKey(Coin_list, models.CASCADE, related_name="coin1")
-    coin2 = models.ForeignKey(Coin_list, models.CASCADE, related_name="coin2")
+    coin1 = models.OneToOneField(Coin_list, models.CASCADE, related_name="coin1")
+    coin2 = models.OneToOneField(Coin_list, models.CASCADE, related_name="coin2")
 
     def position_name(self):
         return str(self.paper_trading) + "/" + str(self.coin1) + str(self.coin2)
@@ -66,8 +64,7 @@ class Position_option(models.Model):
         ("c", "close"),
     )
 
-    in_position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name="in_position",
-                                    verbose_name="in_position")
+    in_position = models.OneToOneField(Position, on_delete=models.CASCADE, related_name="in_position",verbose_name="in_position")
     amount = models.FloatField(verbose_name="token amount")
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
     oreder_reach_date = models.DateTimeField(default=timezone.now, blank=True)
@@ -78,12 +75,3 @@ class Position_option(models.Model):
     def position_name(self):
         return str(self.in_position.paper_trading) + "/" + str(self.in_position.coin1) + str(self.in_position.coin2)
 
-
-class Close_info(models.Model):
-    position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name="close_date_position",
-                                 verbose_name="position", blank=True)
-    date = models.DateTimeField(auto_now_add=True)
-    close_price = models.FloatField()
-
-    def close_info_name(self):
-        return str(self.position.paper_trading) + "/" + str(self.position.coin1) + str(self.position.coin2)

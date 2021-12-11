@@ -35,16 +35,6 @@ class paper_tradingAdmin(admin.ModelAdmin):
 		'enter_date'
 		)
 admin.site.register(Paper_trading,paper_tradingAdmin)
-
-class close_infoAdmin(admin.ModelAdmin):
-	list_display = (
-			'close_info_name',
-			'date',
-			'close_price'
-		)
-admin.site.register(Close_info,close_infoAdmin)
-
-
 admin.site.register(Coin_list)
 
 
