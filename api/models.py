@@ -1,9 +1,10 @@
 from django.db import models
 
 # Create your models here.
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 
+User = get_user_model()
 
 class Paper_trading(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="paper_trading", verbose_name="paper trading",blank=True)
