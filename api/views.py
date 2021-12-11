@@ -55,30 +55,28 @@ class PositionTotal(ListAPIView):
 	serializer_class = PositionSerializer
 	permission_classes = (IsSuperUser,)
 
-# <<<<<<< HEAD
-# class PositionOption(ListCreateAPIView):
-# 	queryset = Position_option.objects.all()
-# 	serializer_class = PositionOptionSerializer
-# 	# permission_classes = (UserPositionOption,)
-# 	def get_queryset(self):
-# 		user = self.request.user
-# 		id = self.kwargs['pk']
-# 		query = Position_option.objects.filter(in_position=id,in_position__paper_trading__user=user)
-# 		return query
-# 	def perform_create(self, serializer):
-# 		user = self.request.user
-# 		id = self.kwargs['pk']
+class PositionOption(ListCreateAPIView):
+	queryset = Position_option.objects.all()
+	serializer_class = PositionOptionSerializer
+	# permission_classes = (UserPositionOption,)
+	def get_queryset(self):
+		user = self.request.user
+		id = self.kwargs['pk']
+		query = Position_option.objects.filter(in_position=id,in_position__paper_trading__user=user)
+		return query
+	def perform_create(self, serializer):
+		user = self.request.user
+		id = self.kwargs['pk']
 		
-# 		is_in_position = Position_option.objects.filter(in_position=id)
-# 		if is_in_position:
-# 			return JsonResponse(serializers.errors, status=404)
-# 		else:
-# 			position = Position.objects.filter(id=id)
-# 			position = position.first()
+		is_in_position = Position_option.objects.filter(in_position=id)
+		if is_in_position:
+			return JsonResponse(serializers.errors, status=404)
+		else:
+			position = Position.objects.filter(id=id)
+			position = position.first()
 
-# 		serializer.save(in_position=position)
+		serializer.save(in_position=position)
 
-# =======
 
 class PapertradingViewSet(viewsets.ModelViewSet):
 	# queryset = Paper_trading.objects.all()
