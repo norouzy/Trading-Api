@@ -68,8 +68,8 @@ class Position_option(models.Model):
 
     in_position = models.OneToOneField(Position, on_delete=models.CASCADE, related_name="in_position", verbose_name="in_position")
     amount = models.FloatField(verbose_name="token amount")
-    trade_type = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade type")
-    status = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="trade status")
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
+    trade_type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="trade type", default="w")
     stoploss = models.FloatField(blank=True, null=True)
     take_profit = models.FloatField(blank=True, null=True)
     oreder_reach_date = models.DateTimeField(default=timezone.now, null=True, blank=True)
