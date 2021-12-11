@@ -9,8 +9,12 @@ User = get_user_model()
 class Paper_trading(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="paper_trading", verbose_name="paper trading",blank=True)
     enter_balance = models.FloatField()
-    balance = models.FloatField()
+    balance = models.FloatField(blank=True,default=enter_balance)
     enter_date = models.DateTimeField(auto_now_add=True)
+    def save(self, *args, **kwargs):
+        if not self.balance:
+            self.balance = self.enter_balance
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.user)

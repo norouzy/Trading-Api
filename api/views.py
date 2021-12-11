@@ -49,7 +49,6 @@ class PositionCreate(CreateAPIView):
 		paper = user.paper_trading
 		serializer.save(paper_trading=paper)
 
-
 class PositionTotal(ListAPIView):
 	queryset = Position.objects.all()
 	serializer_class = PositionSerializer
