@@ -39,7 +39,7 @@ class Position(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
     entert_price = models.FloatField()
     oreder_set_date = models.DateTimeField(auto_now_add=True)
-    oreder_reach_date = models.DateTimeField(default=timezone.now)
+    oreder_reach_date = models.DateTimeField(blank=True, null=True)
     coin1 = models.OneToOneField(Coin_list, models.CASCADE, related_name="coin1")
     coin2 = models.OneToOneField(Coin_list, models.CASCADE, related_name="coin2")
 
