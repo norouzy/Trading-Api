@@ -19,6 +19,7 @@ admin.site.register(Position,positonAdmin)
 class positon_optionAdmin(admin.ModelAdmin):
 	list_display = (
 		'position_name',
+		'trade_type',
 		'status',
 		'amount',
 		'oreder_reach_date',
