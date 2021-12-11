@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.views import APIView
 
-from .serializers import PaperTradingSerializer, PositionSerializer, PositionCreateSerializer, PositionAddSerializer, UserSerializer
+from .serializers import *
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from django.contrib.auth import get_user_model
 from .permissions import IsSuperUser, IsUser, UserPosition
