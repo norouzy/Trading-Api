@@ -35,13 +35,14 @@ class Position(models.Model):
 
     paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="position",verbose_name="position")
     trade_type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="type")
-    amount = models.FloatField(verbose_name="token amount")
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
-    entert_price = models.FloatField()
-    oreder_set_date = models.DateTimeField(auto_now_add=True)
-    oreder_reach_date = models.DateTimeField(blank=True, null=True)
     coin1 = models.OneToOneField(Coin_list, models.CASCADE, related_name="coin1")
     coin2 = models.OneToOneField(Coin_list, models.CASCADE, related_name="coin2")
+    entert_price = models.FloatField()
+    amount = models.FloatField(verbose_name="token amount")
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
+    oreder_set_date = models.DateTimeField(auto_now_add=True)
+    oreder_reach_date = models.DateTimeField(blank=True, null=True)
+
 
     def position_name(self):
         return str(self.paper_trading) + "/" + str(self.coin1) + str(self.coin2)
@@ -67,10 +68,11 @@ class Position_option(models.Model):
     in_position = models.OneToOneField(Position, on_delete=models.CASCADE, related_name="in_position",verbose_name="in_position")
     amount = models.FloatField(verbose_name="token amount")
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
-    oreder_reach_date = models.DateTimeField(default=timezone.now, blank=True)
+    status = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="trade status")
     stoploss = models.FloatField(blank=True, null=True)
     take_profit = models.FloatField(blank=True, null=True)
-    status = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="trade status")
+    oreder_reach_date = models.DateTimeField(default=timezone.now, blank=True)
+
 
     def position_name(self):
         return str(self.in_position.paper_trading) + "/" + str(self.in_position.coin1) + str(self.in_position.coin2)
