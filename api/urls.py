@@ -4,6 +4,8 @@ from rest_framework import routers
 
 app_name = "api"
 
+router = routers.SimpleRouter()
+router.register('paper-tradingg', PapertradingViewSet, basename='paper_trading')
 
 urlpatterns = [
 	path('user/', UserList.as_view(),name="UserList"),
@@ -15,4 +17,7 @@ urlpatterns = [
 
 	path('positions/', PositionTotal.as_view()),
 	path('paper-trading/', PapertradingListView.as_view()),
+	path('paper-trading/<int:pk>/', PapertradingDetail.as_view()),
+
+	path('', include(router.urls))
 ]
