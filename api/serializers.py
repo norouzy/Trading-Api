@@ -4,6 +4,7 @@ from .models import *
 
 User = get_user_model()
 
+
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
@@ -15,7 +16,8 @@ class PaperTradingSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = Paper_trading
-		fields = ("enter_balance",)
+		fields = ("user", "enter_balance",)
+		# fields = "__all__"
 
 
 class PositionSerializer(serializers.ModelSerializer):
@@ -31,17 +33,20 @@ class PositionSerializer(serializers.ModelSerializer):
 		model = Position
 		fields = "__all__"
 
+
 class PositionUpdateSerializer(serializers.ModelSerializer):
 	status = serializers.ReadOnlyField(source='c')
 	class Meta:
 		model = Position
 		fields = ['status',]
 
+
 class PositionAddSerializer(serializers.ModelSerializer):
 	paper_trading = serializers.ReadOnlyField(source='paper_trading.id')
 	class Meta:
 		model = Position
 		fields = "__all__"
+
 
 class PositionOptionSerializer(serializers.ModelSerializer):
 	in_position = serializers.ReadOnlyField(source='in_position.id')
