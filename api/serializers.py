@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Position, Paper_trading
+from .models import *
 
 User = get_user_model()
 
@@ -40,3 +40,11 @@ class PositionAddSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Position
 		fields = "__all__"
+
+class PositionOptionSerializer(serializers.ModelSerializer):
+	in_position = serializers.ReadOnlyField(source='in_position.id')
+	trade_type = serializers.ReadOnlyField(source='w')
+	oreder_reach_date = serializers.ReadOnlyField(source='')
+	class Meta:
+		model = Position_option
+		fields ="__all__"

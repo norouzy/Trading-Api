@@ -1,11 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from rest_framework.views import APIView
-
+from django.http import HttpResponse, JsonResponse
 from .serializers import *
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from django.contrib.auth import get_user_model
-from .permissions import IsSuperUser, IsUser, UserPosition
+from .permissions import IsSuperUser, IsUser, UserPosition, UserPositionOption
 from .models import Position
 
 from rest_framework.response import Response
@@ -54,3 +52,26 @@ class PositionTotal(ListAPIView):
 	queryset = Position.objects.all()
 	serializer_class = PositionSerializer
 	permission_classes = (IsSuperUser,)
+
+class PositionOption(ListCreateAPIView):
+	queryset = Position_option.objects.all()
+	serializer_class = PositionOptionSerializer
+	# permission_classes = (UserPositionOption,)
+	def get_queryset(self):
+		user = self.request.user
+		id = self.kwargs['pk']
+		query = Position_option.objects.filter(in_position=id,in_position__paper_trading__user=user)
+		return query
+	def perform_create(self, serializer):
+		user = self.request.user
+		id = self.kwargs['pk']
+		
+		is_in_position = Position_option.objects.filter(in_position=id)
+		if is_in_position:
+			return JsonResponse(serializers.errors, status=404)
+		else:
+			position = Position.objects.filter(id=id)
+			position = position.first()
+
+		serializer.save(in_position=position)
+

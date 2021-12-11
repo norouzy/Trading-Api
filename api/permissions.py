@@ -29,6 +29,14 @@ class UserPosition(BasePermission):
 				request.user.is_authenticated and
 				request.user.id == obj.paper_trading.user.id
 			)
+class UserPositionOption(BasePermission):
+	def has_object_permission(self, request, view, obj):
+		return bool(
+				request.user.is_authenticated and
+				request.user.is_superuser or
+				request.user.is_authenticated and
+				request.user.id == obj.in_position.paper_trading.user.id
+			)
 
 
 class IsStaffOrReadOnly(BasePermission):

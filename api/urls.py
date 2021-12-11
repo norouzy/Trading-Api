@@ -10,6 +10,7 @@ urlpatterns = [
 
 	path('user/positions/', PositionList.as_view()),
 	path('user/positions/<int:pk>/', PositionStatusUpdate.as_view()),
+	path('user/positions/<int:pk>/option/', PositionOption.as_view()),
 	path('user/positions/create/', PositionCreate.as_view()),
 
 	path('positions/', PositionTotal.as_view()),
