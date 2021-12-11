@@ -35,8 +35,8 @@ class Position(models.Model):
 
     paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="position",verbose_name="position")
     trade_type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="type")
-    coin1 = models.OneToOneField(Coin_list, models.CASCADE, related_name="coin1")
-    coin2 = models.OneToOneField(Coin_list, models.CASCADE, related_name="coin2")
+    coin1 = models.ForeignKey(Coin_list, models.CASCADE, related_name="coin1")
+    coin2 = models.ForeignKey(Coin_list, models.CASCADE, related_name="coin2")
     entert_price = models.FloatField()
     amount = models.FloatField(verbose_name="token amount")
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
