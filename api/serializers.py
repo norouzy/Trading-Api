@@ -28,11 +28,11 @@ class PositionSerializer(serializers.ModelSerializer):
 		model = Position
 		fields = "__all__"
 
-class PositionCreateSerializer(serializers.ModelSerializer):
-
+class PositionUpdateSerializer(serializers.ModelSerializer):
+	status = serializers.ReadOnlyField(source='c')
 	class Meta:
 		model = Position
-		fields = ['status','oreder_reach_date']
+		fields = ['status',]
 
 class PositionAddSerializer(serializers.ModelSerializer):
 	paper_trading = serializers.ReadOnlyField(source='paper_trading.id')

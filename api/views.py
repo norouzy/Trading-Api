@@ -33,12 +33,12 @@ class PositionList(ListAPIView):
 		return query
 
 
-class PositionDetail(RetrieveUpdateDestroyAPIView):
-	serializer_class = PositionCreateSerializer
+class PositionStatusUpdate(RetrieveUpdateDestroyAPIView):
+	serializer_class = PositionUpdateSerializer
 	permission_classes = (UserPosition,)
 	def get_queryset(self):
 		user = self.request.user
-		query = Position.objects.all()
+		query = Position.objects.filter(paper_trading__user=user)
 		return query
 
 class PositionCreate(CreateAPIView):
