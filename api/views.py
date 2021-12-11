@@ -7,7 +7,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, Re
 from rest_framework import viewsets
 
 from django.contrib.auth import get_user_model
-from .permissions import IsSuperUser, IsUser, UserPosition
+from .permissions import IsSuperUser, IsUser, UserPosition, UserPapertrading
 from .models import Position
 
 from rest_framework.response import Response
@@ -58,6 +58,18 @@ class PositionTotal(ListAPIView):
 	permission_classes = (IsSuperUser,)
 
 
+class PapertradingViewSet(viewsets.ModelViewSet):
+	# queryset = Paper_trading.objects.all()
+	serializer_class = PaperTradingSerializer
+	permission_classes = (UserPapertrading,)
+	def get_queryset(self):
+		user = self.request.user
+		query = Paper_trading.objects.filter(user=user)
+		return query
+	def perform_create(self, serializer):
+		user = self.request.user
+		serializer.save(user=user)
+
 class PapertradingListView(ListCreateAPIView):
 	serializer_class = PaperTradingSerializer
 	permission_classes = (IsUser,)
@@ -68,3 +80,11 @@ class PapertradingListView(ListCreateAPIView):
 	def perform_create(self, serializer):
 		user = self.request.user
 		serializer.save(user=user)
+
+class PapertradingDetail(RetrieveUpdateDestroyAPIView):
+	serializer_class = PaperTradingSerializer
+	permission_classes = (UserPapertrading,)
+	def get_queryset(self):
+		user = self.request.user
+		query = Paper_trading.objects.filter(user=user)
+		return query
