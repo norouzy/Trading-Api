@@ -15,7 +15,7 @@ class PaperTradingSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = Paper_trading
-		fields = "__all__"
+		fields = "enter_balance"
 
 
 class PositionSerializer(serializers.ModelSerializer):
