@@ -5,10 +5,11 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, Re
 from rest_framework import viewsets
 
 from django.contrib.auth import get_user_model
-from .permissions import IsSuperUser, IsUser, UserPosition, UserPapertrading
+from .permissions import *
 from .models import Position
-
+from rest_framework import serializers
 from rest_framework.response import Response
+from django.core.exceptions import ValidationError
 
 
 User = get_user_model()
@@ -56,7 +57,7 @@ class PositionTotal(ListAPIView):
 class PositionOption(ListCreateAPIView):
 	queryset = Position_option.objects.all()
 	serializer_class = PositionOptionSerializer
-	# permission_classes = (UserPositionOption,)
+	permission_classes = (UserPositionOption,)
 	def get_queryset(self):
 		user = self.request.user
 		id = self.kwargs['pk']
@@ -96,7 +97,11 @@ class PapertradingListView(ListCreateAPIView):
 		return query
 	def perform_create(self, serializer):
 		user = self.request.user
-		serializer.save(user=user)
+		query = Paper_trading.objects.filter(user=user)
+		if query :
+			raise serializers.ValidationError("You Have Paper account")
+		else:
+			serializer.save(user=user)
 
 class PapertradingDetail(RetrieveUpdateDestroyAPIView):
 	serializer_class = PaperTradingSerializer

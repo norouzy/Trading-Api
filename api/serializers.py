@@ -13,11 +13,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PaperTradingSerializer(serializers.ModelSerializer):
 	user = serializers.ReadOnlyField(source='user.id')
+
+	def validate(self, data):
+		data.update({'balance':data['enter_balance']})
+		return data
+
 	
 	class Meta:
 		model = Paper_trading
-		# fields = ["user", "enter_balance"]
-		fields = "__all__"
+		fields = ["user", "enter_balance"]
 
 
 class PositionSerializer(serializers.ModelSerializer):
