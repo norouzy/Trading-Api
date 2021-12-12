@@ -56,6 +56,7 @@ class PositionOptionSerializer(serializers.ModelSerializer):
 	in_position = serializers.ReadOnlyField(source='in_position.id')
 	trade_type = serializers.ReadOnlyField(source='w')
 	oreder_reach_date = serializers.ReadOnlyField(source='')
+	status = serializers.ReadOnlyField(source='')
 	class Meta:
 		model = Position_option
 		fields ="__all__"
