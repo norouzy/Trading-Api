@@ -19,6 +19,7 @@ from .models import Position
 User = get_user_model()
 
 
+
 class UserList(ListCreateAPIView):
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
