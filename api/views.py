@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 
 from .serializers import *
 
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView, UpdateAPIView
 from rest_framework import viewsets
 from rest_framework import serializers
 from rest_framework.response import Response
@@ -64,29 +64,38 @@ class PositionTotal(ListAPIView):
 
 
 class PositionOption(ListCreateAPIView):
-	queryset = Position_option.objects.all()
+  # queryset = Position_option.objects.all()
 	serializer_class = PositionOptionSerializer
 	permission_classes = (UserPositionOption,)
 
 	def get_queryset(self):
 		user = self.request.user
 		id = self.kwargs['pk']
-		query = Position_option.objects.filter(in_position=id,in_position__paper_trading__user=user)
+		query = Position_option.objects.filter(in_position=id, in_position__paper_trading__user=user)
 		return query
 
 	def perform_create(self, serializer):
 		user = self.request.user
 		id = self.kwargs['pk']
-		
-		is_in_position = Position_option.objects.filter(in_position=id)
-		if is_in_position:
-			return JsonResponse(serializers.errors, status=404)
+		position = Position.objects.get(id=id)
+		option = Position_option.objects.filter(in_position=position, in_position__paper_trading__user=user)
+		if not option:
+			serializer.save(in_position=position)
 		else:
-			position = Position.objects.filter(id=id)
-			position = position.first()
+			raise serializers.ValidationError("You already have a position option")
 
-		serializer.save(in_position=position)
+class PositionOptionViewset(viewsets.ModelViewSet):
+	serializer_class = PositionOptionSerializer
+	permission_classes = (UserPositionOption,)
+	lookup_field = "in_position"
+	def get_queryset(self):
+		user = self.request.user
+		query = Position_option.objects.filter(in_position__paper_trading__user=user)
+		return query
 
+	def perform_create(self, serializer):
+		user = self.request.user
+		serializer.save(in_position__paper_trading__user=user)
 
 class PapertradingViewSet(viewsets.ModelViewSet):
 	serializer_class = PaperTradingSerializer

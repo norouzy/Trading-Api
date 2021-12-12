@@ -6,6 +6,7 @@ app_name = "api"
 
 router = routers.SimpleRouter()
 router.register('paper-tradingg', PapertradingViewSet, basename='paper_trading')
+router.register('user/position-option', PositionOptionViewset, basename='position-option')
 
 urlpatterns = [
 	path('user/', UserList.as_view(),name="UserList"),
