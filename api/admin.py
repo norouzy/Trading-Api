@@ -43,6 +43,6 @@ class walletAdmin(admin.ModelAdmin):
 		'coin',
 		'amount'
 		)
-admin.site.register(Wallet,walletAdmin)
+admin.site.register(Wallet)
 
 admin.site.register(Coin_list)

@@ -26,7 +26,7 @@ class Coin_list(models.Model):
         return self.coin
 
 class Wallet(models.Model):
-    paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="wallet", verbose_name="user wallet")
+    paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="Wallet", verbose_name="wallet")
     coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="coinName")
     amount = models.FloatField(verbose_name="coin amount")
 
