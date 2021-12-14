@@ -36,4 +36,13 @@ class paper_tradingAdmin(admin.ModelAdmin):
 		'enter_date'
 		)
 admin.site.register(Paper_trading,paper_tradingAdmin)
+
+class walletAdmin(admin.ModelAdmin):
+	list_display = (
+		'paper_trading',
+		'coin',
+		'amount'
+		)
+admin.site.register(Wallet,walletAdmin)
+
 admin.site.register(Coin_list)
