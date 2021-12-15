@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import *
 from extentions.checkCoin import Coinlist
+from extentions.addToWallet import WalletManagment
+from extentions.watchList import WatchList_checker
 User = get_user_model()
 
 
@@ -48,6 +50,8 @@ class UpdatePaperTradingSerializer(serializers.ModelSerializer):
 		model = Paper_trading
 		fields = ["id","user", 'balance']
 
+
+
 class PositionSerializer(serializers.ModelSerializer):
 	def validate(self,data):
 		coin1 = data['coin1']
@@ -67,7 +71,6 @@ class PositionSerializer(serializers.ModelSerializer):
 		model = Position
 		fields = "__all__"
 
-
 class PositionCloseSerializer(serializers.ModelSerializer):
 	status = serializers.ReadOnlyField(source='c')
 	def validate(self,data):
@@ -76,7 +79,6 @@ class PositionCloseSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Position
 		fields = ['status',]
-
 
 class PositionAddSerializer(serializers.ModelSerializer):
 	paper_trading = serializers.ReadOnlyField(source='paper_trading.id')
@@ -98,6 +100,7 @@ class PositionAddSerializer(serializers.ModelSerializer):
 		fields = "__all__"
 
 
+
 class PositionOptionSerializer(serializers.ModelSerializer):
 	in_position = serializers.ReadOnlyField(source='in_position.id')
 	trade_type = serializers.ReadOnlyField(source='w')
@@ -107,6 +110,8 @@ class PositionOptionSerializer(serializers.ModelSerializer):
 		model = Position_option
 		fields ="__all__"
 
+
+
 class WalletSerializer(serializers.ModelSerializer):
 	paper_trading = serializers.ReadOnlyField(source='paper_trading.id')
 
@@ -114,7 +119,8 @@ class WalletSerializer(serializers.ModelSerializer):
 			coin = data['coin']
 			if not Coinlist.check(coin):
 				raise serializers.ValidationError("coin not found")
-			if data['amount']>0 and not data['coin']==None: 
+			if data['amount']>0 and not data['coin']==None:
+				# WalletManagment.ckeck(coin,data['amount'])
 				return data
 			elif data['amount']<=0:
 					raise serializers.ValidationError("amount cant be zero or under zero")
@@ -125,13 +131,36 @@ class WalletSerializer(serializers.ModelSerializer):
 		model = Wallet
 		fields = "__all__"
 
+
+
 class WatchListSerializer(serializers.ModelSerializer):
 	user = serializers.ReadOnlyField(source='user.id')
 	def validate(self, data):
-		coin = data['coin']
-		if not Coinlist.check(coin):
-			raise serializers.ValidationError("coin not found")
+		coin1 = data['coin1']
+		coin2 = data['coin2']
+		user = self.context['request'].user
+
+
+
+		if not Coinlist.check(coin1) and not Coinlist.check(coin2):
+			raise serializers.ValidationError("coin1 and coin2 not found")
+		elif not Coinlist.check(coin1) and Coinlist.check(coin2):
+			raise serializers.ValidationError("coin1 not found")
+		elif Coinlist.check(coin1) and not Coinlist.check(coin2):
+			raise serializers.ValidationError("coin2 not found")
+		elif coin1==coin2:
+			raise serializers.ValidationError("coin1 and coin2 cant be same")
+			
+
+		results=WatchList_checker.check(coin1,coin2,user)
+		if not results:
+			raise serializers.ValidationError("repeative coin")
 		return data
 	class Meta:
 		model = Watch_list
 		fields = "__all__"
+# WatchListSerializer(
+	# context={'request': <rest_framework.request.Request: POST '/user/watch-list/'>, 'format': None, 'view': <api.views.watchList_List object>}, data=<QueryDict: {'csrfmiddlewaretoken': ['SLgrcCRfyjcql6TIzNpQiTQCqrQsgmcbqPwtdKuelWElE6MyDX9QrgzI19jE2Zoy'], 'coin': ['cake']}>):
+ #    id = IntegerField(label='ID', read_only=True)
+ #    user = ReadOnlyField(source='user.id')
+ #    coin = CharField(max_length=20)

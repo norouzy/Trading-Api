@@ -184,8 +184,9 @@ class watchList_Details(RetrieveUpdateDestroyAPIView):
         user = self.request.user
         query = Watch_list.objects.filter(user=user)
         return query
+from extentions.watchList import WatchList_checker
 
-# def test(request):
-#     print("hiii")
-#     res = Coinlist.check("cake")
-#     return HttpResponse(res)
+def test(request):
+    print("hiii")
+    results=WatchList_checker.check("cake",request.user)
+    return HttpResponse(results)

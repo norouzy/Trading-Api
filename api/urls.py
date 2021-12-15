@@ -16,7 +16,7 @@ urlpatterns = [
 	path('user/positions/<int:pk>/', PositionCloseUpdate.as_view()),
 	path('user/positions/<int:pk>/option/create/', PositionOption.as_view()),
 	path('user/positions/<int:in_position>/option/update/', PositionOptionDetail.as_view()),
-	path('user/wallet',WalletList.as_view()),
+	path('user/wallet/',WalletList.as_view()),
 	path('user/wallet/<int:pk>/',WalletDetails.as_view()),
 	path('user/watch-list/',watchList_List.as_view()),
 	path('user/watch-list/<int:pk>/',watchList_Details.as_view()),
@@ -24,7 +24,7 @@ urlpatterns = [
 	path('positions/', PositionTotal.as_view()),
 	path('paper-trading/', PapertradingListView.as_view()),
 	path('paper-trading/<int:pk>/', PapertradingDetail.as_view()),
-	# path('test/', test,name="test"),
+	path('test/', test,name="test"),
 
 	path('', include(router.urls))
 ]
