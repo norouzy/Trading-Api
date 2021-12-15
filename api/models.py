@@ -13,7 +13,10 @@ class Paper_trading(models.Model):
     enter_date = models.DateTimeField(auto_now_add=True)
     def save(self, *args, **kwargs):
         if not self.balance:
-            self.balance = self.enter_balance
+            if self.balance <= 0.0:
+                self.balance = 0.0
+            else:
+                self.balance = self.enter_balance
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -29,6 +32,7 @@ class Wallet(models.Model):
     paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="Wallet", verbose_name="wallet")
     coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="coinName")
     amount = models.FloatField(verbose_name="coin amount")
+
 
 
 

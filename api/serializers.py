@@ -11,18 +11,42 @@ class UserSerializer(serializers.ModelSerializer):
 		fields = ['username', 'first_name', 'last_name', 'email']
 
 
-class PaperTradingSerializer(serializers.ModelSerializer):
+class CreatePaperTradingSerializer(serializers.ModelSerializer):
 	user = serializers.ReadOnlyField(source='user.id')
 
 	def validate(self, data):
-		data.update({'balance':data['enter_balance']})
-		return data
+		key = list(data)
+		
+		if not 'balance' in key and 'enter_balance' in key: 
+			
+			if data['enter_balance']>0.0:
+				
+				data.update({'balance':data['enter_balance']})
+			else:
+				raise serializers.ValidationError("enter balance cant be under zero")
+			return data
 
 	
 	class Meta:
 		model = Paper_trading
-		fields = ["user", "enter_balance"]
+		fields = ["id","user", 'enter_balance']
 
+class UpdatePaperTradingSerializer(serializers.ModelSerializer):
+	user = serializers.ReadOnlyField(source='user.id')
+
+	def validate(self, data):
+		key = list(data)
+		
+		if 'balance' in key and not 'enter_balance' in key: 
+			if data['balance']>=0.0:
+				return data
+			else:
+				raise serializers.ValidationError("enter balance cant be under zero")
+		else:
+			raise serializers.ValidationError("some thing went wrong")
+	class Meta:
+		model = Paper_trading
+		fields = ["id","user", 'balance']
 
 class PositionSerializer(serializers.ModelSerializer):
 	def get_coin1(self, obj):

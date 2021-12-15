@@ -100,7 +100,7 @@ class PositionOptionDetail(RetrieveUpdateDestroyAPIView):
 
 
 class PapertradingViewSet(viewsets.ModelViewSet):
-    serializer_class = PaperTradingSerializer
+    serializer_class = CreatePaperTradingSerializer
     permission_classes = (UserPapertrading,)
 
     def get_queryset(self):
@@ -114,7 +114,7 @@ class PapertradingViewSet(viewsets.ModelViewSet):
 
 
 class PapertradingListView(ListCreateAPIView):
-    serializer_class = PaperTradingSerializer
+    serializer_class = CreatePaperTradingSerializer
     permission_classes = (IsUser,)
 
     def get_queryset(self):
@@ -129,12 +129,10 @@ class PapertradingListView(ListCreateAPIView):
             serializer.save(user=user)
         except IntegrityError:
             raise serializers.ValidationError("You already have a paper account")
-        else:
-            raise serializers.ValidationError("Something went wrong")
 
 
 class PapertradingDetail(RetrieveUpdateDestroyAPIView):
-    serializer_class = PaperTradingSerializer
+    serializer_class = UpdatePaperTradingSerializer
     permission_classes = (UserPapertrading,)
 
     def get_queryset(self):
