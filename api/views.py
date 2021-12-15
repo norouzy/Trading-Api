@@ -41,8 +41,8 @@ class PositionList(ListAPIView):
         return query
 
 
-class PositionStatusUpdate(RetrieveUpdateDestroyAPIView):
-    serializer_class = PositionUpdateSerializer
+class PositionCloseUpdate(RetrieveUpdateDestroyAPIView):
+    serializer_class = PositionCloseSerializer
     permission_classes = (UserPosition,)
 
     def get_queryset(self):
@@ -184,4 +184,8 @@ class watchList_Details(RetrieveUpdateDestroyAPIView):
         user = self.request.user
         query = Watch_list.objects.filter(user=user)
         return query
-    
+
+# def test(request):
+#     print("hiii")
+#     res = Coinlist.check("cake")
+#     return HttpResponse(res)

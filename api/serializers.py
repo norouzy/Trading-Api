@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import *
-
+from extentions.checkCoin import Coinlist
 User = get_user_model()
 
 
@@ -49,21 +49,30 @@ class UpdatePaperTradingSerializer(serializers.ModelSerializer):
 		fields = ["id","user", 'balance']
 
 class PositionSerializer(serializers.ModelSerializer):
-	def get_coin1(self, obj):
-		return obj.coin1.coin
-
-	def get_coin2(self, obj):
-		return obj.coin2.coin
-	coin1 = serializers.SerializerMethodField('get_coin1')
-	coin2 = serializers.SerializerMethodField('get_coin2')
+	def validate(self,data):
+		coin1 = data['coin1']
+		coin2 = data['coin2']
+		if  Coinlist.check(coin1) and Coinlist.check(coin2):
+			return data
+		elif not Coinlist.check(coin1) and Coinlist.check(coin2):
+			raise serializers.ValidationError("coin1 not found")
+		elif Coinlist.check(coin1) and not Coinlist.check(coin2):
+			raise serializers.ValidationError("coin2 not found")
+		elif coin1==coin2:
+			raise serializers.ValidationError("coin1 and coin2 cant be same")
+		else:
+			raise serializers.ValidationError("coin1 and coin2 not found")
 
 	class Meta:
 		model = Position
 		fields = "__all__"
 
 
-class PositionUpdateSerializer(serializers.ModelSerializer):
+class PositionCloseSerializer(serializers.ModelSerializer):
 	status = serializers.ReadOnlyField(source='c')
+	def validate(self,data):
+		data.update({'status':'c'})
+		return data
 	class Meta:
 		model = Position
 		fields = ['status',]
@@ -71,6 +80,19 @@ class PositionUpdateSerializer(serializers.ModelSerializer):
 
 class PositionAddSerializer(serializers.ModelSerializer):
 	paper_trading = serializers.ReadOnlyField(source='paper_trading.id')
+	def validate(self,data):
+		coin1 = data['coin1']
+		coin2 = data['coin2']
+		if  Coinlist.check(coin1) and Coinlist.check(coin2):
+			return data
+		elif not Coinlist.check(coin1) and Coinlist.check(coin2):
+			raise serializers.ValidationError("coin1 not found")
+		elif Coinlist.check(coin1) and not Coinlist.check(coin2):
+			raise serializers.ValidationError("coin2 not found")
+		elif coin1==coin2:
+			raise serializers.ValidationError("coin1 and coin2 cant be same")
+		else:
+			raise serializers.ValidationError("coin1 and coin2 not found")
 	class Meta:
 		model = Position
 		fields = "__all__"
@@ -89,7 +111,9 @@ class WalletSerializer(serializers.ModelSerializer):
 	paper_trading = serializers.ReadOnlyField(source='paper_trading.id')
 
 	def validate(self, data):
-			
+			coin = data['coin']
+			if not Coinlist.check(coin):
+				raise serializers.ValidationError("coin not found")
 			if data['amount']>0 and not data['coin']==None: 
 				return data
 			elif data['amount']<=0:
@@ -103,7 +127,11 @@ class WalletSerializer(serializers.ModelSerializer):
 
 class WatchListSerializer(serializers.ModelSerializer):
 	user = serializers.ReadOnlyField(source='user.id')
-
+	def validate(self, data):
+		coin = data['coin']
+		if not Coinlist.check(coin):
+			raise serializers.ValidationError("coin not found")
+		return data
 	class Meta:
 		model = Watch_list
 		fields = "__all__"

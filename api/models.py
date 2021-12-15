@@ -30,12 +30,14 @@ class Coin_list(models.Model):
 
 class Wallet(models.Model):
     paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="Wallet", verbose_name="wallet")
-    coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="coinName")
+    # coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="coinName")
+    coin = models.CharField(max_length=20)
     amount = models.FloatField(verbose_name="coin amount")
 
 class Watch_list(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user", verbose_name="user")
-    coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="Wcoin")
+    # coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="Wcoin")
+    coin = models.CharField(max_length=20)
 
 
 class Position(models.Model):
@@ -51,8 +53,10 @@ class Position(models.Model):
 
     paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="position",verbose_name="position")
     trade_type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="type")
-    coin1 = models.ForeignKey(Coin_list, models.CASCADE, related_name="coin1")
-    coin2 = models.ForeignKey(Coin_list, models.CASCADE, related_name="coin2")
+    # coin1 = models.ForeignKey(Coin_list, models.CASCADE, related_name="coin1")
+    # coin2 = models.ForeignKey(Coin_list, models.CASCADE, related_name="coin2")
+    coin1 = models.CharField(max_length=20)
+    coin2 = models.CharField(max_length=20)
     entert_price = models.FloatField()
     amount = models.FloatField(verbose_name="token amount")
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
