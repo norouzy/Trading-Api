@@ -84,3 +84,26 @@ class PositionOptionSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Position_option
 		fields ="__all__"
+
+class WalletSerializer(serializers.ModelSerializer):
+	paper_trading = serializers.ReadOnlyField(source='paper_trading.id')
+
+	def validate(self, data):
+			
+			if data['amount']>0 and not data['coin']==None: 
+				return data
+			elif data['amount']<=0:
+					raise serializers.ValidationError("amount cant be zero or under zero")
+			else:
+				raise serializers.ValidationError("some thing went wrong")
+
+	class Meta:
+		model = Wallet
+		fields = "__all__"
+
+class WatchListSerializer(serializers.ModelSerializer):
+	user = serializers.ReadOnlyField(source='user.id')
+
+	class Meta:
+		model = Watch_list
+		fields = "__all__"

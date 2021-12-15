@@ -139,3 +139,49 @@ class PapertradingDetail(RetrieveUpdateDestroyAPIView):
         user = self.request.user
         query = Paper_trading.objects.filter(user=user)
         return query
+
+class WalletList(ListCreateAPIView):
+    serializer_class = WalletSerializer
+    permission_classes = (IsUser,)
+    def get_queryset(self):
+        user = self.request.user
+        query = Wallet.objects.filter(paper_trading__user=user)
+        return query
+    def perform_create(self, serializer):
+        user = self.request.user
+        try:
+            serializer.save(paper_trading=user.paper_trading)
+        except IntegrityError:
+            raise serializers.ValidationError("You already have a paper account")
+
+class WalletDetails(RetrieveUpdateDestroyAPIView):
+    serializer_class = WalletSerializer
+    permission_classes = (UserPosition,)
+    def get_queryset(self):
+        user = self.request.user
+        query = Wallet.objects.filter(paper_trading__user=user)
+        return query
+
+
+class watchList_List(ListCreateAPIView):
+    serializer_class = WatchListSerializer
+    permission_classes = (IsUser,)
+    def get_queryset(self):
+        user = self.request.user
+        query = Watch_list.objects.filter(user=user)
+        return query
+    def perform_create(self, serializer):
+        user = self.request.user
+        try:
+            serializer.save(user=user)
+        except IntegrityError:
+            raise serializers.ValidationError("You already have a paper account")
+
+class watchList_Details(RetrieveUpdateDestroyAPIView):
+    serializer_class = WatchListSerializer
+    permission_classes = (UserWatchList,)
+    def get_queryset(self):
+        user = self.request.user
+        query = Watch_list.objects.filter(user=user)
+        return query
+    

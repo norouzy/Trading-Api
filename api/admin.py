@@ -45,4 +45,11 @@ class walletAdmin(admin.ModelAdmin):
 		)
 admin.site.register(Wallet, walletAdmin)
 
+class watchListAdmin(admin.ModelAdmin):
+	list_display = (
+		'user',
+		'coin',
+		)
+admin.site.register(Watch_list, watchListAdmin)
+
 admin.site.register(Coin_list)

@@ -33,7 +33,9 @@ class Wallet(models.Model):
     coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="coinName")
     amount = models.FloatField(verbose_name="coin amount")
 
-
+class Watch_list(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user", verbose_name="user")
+    coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="Wcoin")
 
 
 class Position(models.Model):

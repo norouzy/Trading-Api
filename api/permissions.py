@@ -13,7 +13,7 @@ class IsSuperUser(BasePermission):
 class IsUser(BasePermission):
 
 	def has_object_permission(self, request, view, User):
-		
+
 		return bool(
 				request.user.is_authenticated and
 				request.user.is_superuser or
@@ -21,6 +21,14 @@ class IsUser(BasePermission):
 				request.user.id == User.id
 			)
 
+class UserWatchList(BasePermission):
+	def has_object_permission(self, request, view, obj):
+		return bool(
+				request.user.is_authenticated and
+				request.user.is_superuser or
+				request.user.is_authenticated and
+				request.user.id == obj.user.id
+			)
 class UserPosition(BasePermission):
 	def has_object_permission(self, request, view, obj):
 		return bool(
