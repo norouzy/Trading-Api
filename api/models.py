@@ -36,10 +36,9 @@ class Wallet(models.Model):
 
 class Watch_list(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user", verbose_name="user")
-    # coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="Wcoin")
     coin = models.CharField(max_length=20)
-    coin1 = models.CharField(max_length=20)
-    coin2 = models.CharField(max_length=20)
+    # coin1 = models.CharField(max_length=20)
+    # coin2 = models.CharField(max_length=20)
     
 
 
