@@ -1,18 +1,13 @@
-from api.models import Wallet,Paper_trading
+from api.models import WalletItem
 
 class WalletManagment():
-	def check(coin,amount,user):
-		
-		paper_trading =  Paper_trading.objects.get(user=user)
-		data = Wallet.objects.filter(coin=coin,paper_trading__id=paper_trading.id)
-		data = data.first()
-		if not data ==None:
-			value = data.amount + amount
-			results = Wallet.objects.get(id=data.id)
-			results.amount = value
-			results.save()
-		else:
-			value = amount
-			Wallet.objects.create(coin=coin,amount=value,paper_trading=paper_trading)
-		
-			
+	def check(coin, amount, user, wallet):
+		try:
+			obj = WalletItem.objects.get(coin=coin, wallet__paper_trading__user=user)
+			obj.amount += amount
+			obj.save()
+		except:
+			obj = WalletItem.objects.create(wallet=wallet, coin=coin, amount=amount)
+			obj.save()
+
+		return obj
