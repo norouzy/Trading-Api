@@ -6,11 +6,13 @@ from django.utils import timezone
 
 User = get_user_model()
 
+
 class Paper_trading(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="paper_trading", verbose_name="paper trading",blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="paper_trading", verbose_name="paper trading", blank=True)
     enter_balance = models.FloatField()
     balance = models.FloatField(blank=True, null=True, default=enter_balance)
     enter_date = models.DateTimeField(auto_now_add=True)
+
     def save(self, *args, **kwargs):
         if not self.balance:
             if self.balance <= 0.0:
@@ -22,24 +24,42 @@ class Paper_trading(models.Model):
     def __str__(self):
         return str(self.user)
 
+
 class Coin_list(models.Model):
     coin = models.CharField(max_length=20)
-
     def __str__(self):
         return self.coin
 
+
 class Wallet(models.Model):
-    paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="Wallet", verbose_name="wallet")
+    paper_trading = models.OneToOneField(Paper_trading, on_delete=models.CASCADE, related_name="Wallet", verbose_name="wallet")
+
+    def __str__(self):
+        return f"{self.paper_trading}"
     # coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="coinName")
+    # coin = models.CharField(max_length=20)
+    # amount = models.FloatField(verbose_name="coin amount")
+
+
+class WalletItem(models.Model):
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="wallet_item")
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name="wallet_item")
     coin = models.CharField(max_length=20)
-    amount = models.FloatField(verbose_name="coin amount")
+    amount = models.FloatField(max_length=15)
+    date_added = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.amount < 0:
+            self.amount = 0
+        super().save(*args, **kwargs)
+
 
 class Watch_list(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user", verbose_name="user")
     coin = models.CharField(max_length=20)
     # coin1 = models.CharField(max_length=20)
     # coin2 = models.CharField(max_length=20)
-    
 
 
 class Position(models.Model):
