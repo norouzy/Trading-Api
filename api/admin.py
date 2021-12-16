@@ -16,6 +16,7 @@ class positonAdmin(admin.ModelAdmin):
 		)
 admin.site.register(Position,positonAdmin)
 
+
 class positon_optionAdmin(admin.ModelAdmin):
 	list_display = (
 		'position_name',
@@ -28,6 +29,7 @@ class positon_optionAdmin(admin.ModelAdmin):
 		)
 admin.site.register(Position_option,positon_optionAdmin)
 
+
 class paper_tradingAdmin(admin.ModelAdmin):
 	list_display = (
 		'user',
@@ -37,13 +39,15 @@ class paper_tradingAdmin(admin.ModelAdmin):
 		)
 admin.site.register(Paper_trading,paper_tradingAdmin)
 
+
 class walletAdmin(admin.ModelAdmin):
 	list_display = (
 		'paper_trading',
-		'coin',
-		'amount'
+		# 'coin',
+		# 'amount'
 		)
 admin.site.register(Wallet, walletAdmin)
+
 
 class watchListAdmin(admin.ModelAdmin):
 	list_display = (
@@ -52,5 +56,16 @@ class watchListAdmin(admin.ModelAdmin):
 		# 'coin2',
 		)
 admin.site.register(Watch_list, watchListAdmin)
+
+
+class walletItemAdmin(admin.ModelAdmin):
+	list_display = (
+		# 'user',
+		'wallet',
+		'coin',
+		'amount'
+		)
+admin.site.register(WalletItem, walletItemAdmin)
+
 
 admin.site.register(Coin_list)
