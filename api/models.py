@@ -32,6 +32,7 @@ class Coin_list(models.Model):
 
 
 class Wallet(models.Model):
+# <<<<<<< HEAD
     paper_trading = models.OneToOneField(Paper_trading, on_delete=models.CASCADE, related_name="Wallet", verbose_name="wallet")
 
     def __str__(self):
@@ -40,6 +41,11 @@ class Wallet(models.Model):
     # coin = models.CharField(max_length=20)
     # amount = models.FloatField(verbose_name="coin amount")
 
+# =======
+#     paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="wallet", verbose_name="user wallet")
+#     coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="coinName")
+#     amount = models.FloatField(verbose_name="coin amount")
+# >>>>>>> parent of 5b4ba91... fixed model wallet bugs
 
 class WalletItem(models.Model):
     # user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="wallet_item")

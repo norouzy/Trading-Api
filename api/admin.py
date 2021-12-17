@@ -65,7 +65,11 @@ class walletItemAdmin(admin.ModelAdmin):
 		'coin',
 		'amount'
 		)
+# <<<<<<< HEAD
 admin.site.register(WalletItem, walletItemAdmin)
 
+# =======
+# admin.site.register(Wallet,walletAdmin)
+# >>>>>>> parent of 5b4ba91... fixed model wallet bugs
 
 admin.site.register(Coin_list)

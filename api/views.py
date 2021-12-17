@@ -169,7 +169,7 @@ class WalletDetails(RetrieveUpdateDestroyAPIView):
 
 class WalletItemsList(ListCreateAPIView):
     serializer_class = WalletItemSerializer
-    permission_classes = (UserPosition,)
+    # permission_classes = (UserPosition,)
 
     def get_queryset(self):
         user = self.request.user
@@ -206,7 +206,7 @@ class WalletItemsList(ListCreateAPIView):
 
 class WalletItems(RetrieveUpdateDestroyAPIView):
     serializer_class = WalletItemSerializer
-    permission_classes = (UserPosition,)
+    # permission_classes = (UserPosition,)
 
     def get_queryset(self):
         user = self.request.user

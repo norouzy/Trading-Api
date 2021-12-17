@@ -47,6 +47,15 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Wallet',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('amount', models.FloatField(verbose_name='coin amount')),
+                ('coin', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='coinName', to='api.coin_list')),
+                ('paper_trading', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='wallet', to='api.paper_trading', verbose_name='user wallet')),
+            ],
+        ),
+        migrations.CreateModel(
             name='Position_option',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
