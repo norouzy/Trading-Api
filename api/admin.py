@@ -40,32 +40,23 @@ class paper_tradingAdmin(admin.ModelAdmin):
 admin.site.register(Paper_trading,paper_tradingAdmin)
 
 
-class walletAdmin(admin.ModelAdmin):
-	list_display = (
-		'paper_trading',
-		# 'coin',
-		# 'amount'
-		)
-admin.site.register(Wallet, walletAdmin)
-
 
 class watchListAdmin(admin.ModelAdmin):
 	list_display = (
 		'user',
-		# 'coin1',
-		# 'coin2',
+		'coin1',
+		'coin2',
 		)
 admin.site.register(Watch_list, watchListAdmin)
 
 
-class walletItemAdmin(admin.ModelAdmin):
+class walletAdmin(admin.ModelAdmin):
 	list_display = (
-		# 'user',
-		'wallet',
+		'paper_trading',
 		'coin',
-		'amount'
+		'amount',
 		)
-admin.site.register(WalletItem, walletItemAdmin)
+admin.site.register(Wallet,walletAdmin)
 
 
 admin.site.register(Coin_list)
