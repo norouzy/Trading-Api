@@ -89,6 +89,8 @@ class PositionCloseSerializer(serializers.ModelSerializer):
 
 class PositionAddSerializer(serializers.ModelSerializer):
     paper_trading = serializers.ReadOnlyField(source='paper_trading.id')
+    status = serializers.ReadOnlyField(source='w')
+    oreder_reach_date = serializers.ReadOnlyField(source='')
     def validate(self,data):
         coin1 = data['coin1']
         coin2 = data['coin2']
@@ -96,6 +98,7 @@ class PositionAddSerializer(serializers.ModelSerializer):
             user_id = self.context['request'].user.id
             paper_trading = Paper_trading.objects.get(user__id=user_id)
             if data['order_type'] =="l":
+                data.update({'status':'w'})
                 if data['trade_type'] == "b":
                     is_valid = ValidateWalletCoin.check(data['coin2'], data['amount'], user_id)
                     if is_valid== True :
