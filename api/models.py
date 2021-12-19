@@ -45,6 +45,10 @@ class Position(models.Model):
         ("b", "Buy"),
         ("s", "Sell"),
     )
+    ORDER_TYPE_CHOISES = (
+        ("m", "Market"),
+        ("l", "Limit"),
+    )
     STATUS_CHOICES = (
         ("w", "Working"),
         ("d", "Done"),
@@ -52,7 +56,8 @@ class Position(models.Model):
     )
 
     paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="position",verbose_name="position")
-    trade_type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="type")
+    trade_type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="trade type")
+    order_type = models.CharField(max_length=1, choices=ORDER_TYPE_CHOISES, verbose_name="order type")
     coin1 = models.CharField(max_length=20)
     coin2 = models.CharField(max_length=20)
     entert_price = models.FloatField()
@@ -85,7 +90,7 @@ class Position_option(models.Model):
 
     in_position = models.OneToOneField(Position, on_delete=models.CASCADE, related_name="in_position", verbose_name="in_position")
     amount = models.FloatField(verbose_name="token amount")
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status")
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="trade status", default="p")
     trade_type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOISES, verbose_name="trade type", default="w")
     stoploss = models.FloatField(blank=True, null=True)
     take_profit = models.FloatField(blank=True, null=True)

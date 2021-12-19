@@ -1,11 +1,10 @@
 from api.models import Wallet,Paper_trading
 
 class WalletManagment():
-	def check(coin,amount,user):
+	def check(coin,amount,paper_trading):
 		
-		paper_trading =  Paper_trading.objects.get(user=user)
 		
-		data = Wallet.objects.filter(coin=coin,paper_trading__id=paper_trading.id)
+		data = Wallet.objects.filter(coin=coin,paper_trading=paper_trading)
 		data = data.first()
 		if not data ==None:
 			value = data.amount + amount
@@ -20,6 +19,7 @@ class WalletManagment():
 			if not amount <= 0:
 				value = amount
 				Wallet.objects.create(coin=coin,amount=value,paper_trading=paper_trading)
+				return True
 			else:
 				return "amount coin cant be zero or under zero";
 			
