@@ -2,6 +2,8 @@ from channels.routing import ProtocolTypeRouter,URLRouter
 from channels.auth import AuthMiddlewareStack
 from django.urls import path
 from api import consumer
+# from .middleware import TokenAuthMiddleware
+from django_channels_jwt_auth_middleware.auth import JWTAuthMiddlewareStack
 
 ws_pattern= [
     path('ws/tableData/',consumer.TableData.as_asgi()),
@@ -9,6 +11,6 @@ ws_pattern= [
 
 application= ProtocolTypeRouter(
     {
-        'websocket':AuthMiddlewareStack(URLRouter(ws_pattern))
+        'websocket':JWTAuthMiddlewareStack(URLRouter(ws_pattern))
     }
 )
