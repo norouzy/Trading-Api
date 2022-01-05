@@ -218,5 +218,5 @@ class WatchListSerializer(serializers.ModelSerializer):
 
 class CoinListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Watch_list
+        model = Coin_list
         fields = "__all__"
