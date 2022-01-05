@@ -23,8 +23,10 @@ urlpatterns = [
 	path('positions/', PositionTotal.as_view()),
 	path('paper-trading/', PapertradingListView.as_view()),
 	path('paper-trading/<int:pk>/', PapertradingDetail.as_view()),
-	path('test/', test,name="test"),
+	path('test/', test, name="test"),
 	path('sokect_test/', socket_test,name="socket_test"),
+
+	path('coinlist-udate/', coinListView.as_view()),
 
 	path('', include(router.urls))
 ]

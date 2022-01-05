@@ -6,12 +6,12 @@ class WalletManagment():
 		
 		data = Wallet.objects.filter(coin=coin,paper_trading=paper_trading)
 		data = data.first()
-		if not data ==None:
+		if not data == None:
 			value = data.amount + amount
 			results = Wallet.objects.get(id=data.id)
 			if value <= 0:
 				results.delete()
-			else :
+			else:
 				results.amount = value
 				results.save()
 			return True

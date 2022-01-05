@@ -22,11 +22,13 @@ class Paper_trading(models.Model):
     def __str__(self):
         return str(self.user)
 
+
 class Coin_list(models.Model):
     coin = models.CharField(max_length=20)
 
     def __str__(self):
         return self.coin
+
 
 class Wallet(models.Model):
     paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="Wallet", verbose_name="wallet")
@@ -35,10 +37,13 @@ class Wallet(models.Model):
 
 
 class Watch_list(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user", verbose_name="user")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watch_list", verbose_name="user")
+    # date_added = models.DateTimeField(auto_now_add=True)
     # coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="Wcoin")
     coin1 = models.CharField(max_length=20)
     coin2 = models.CharField(max_length=20)
+    date_added = models.DateTimeField(auto_now_add=True)
+
 
 class Position(models.Model):
     TRADE_TYPE_CHOISES = (
