@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.db import IntegrityError
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-
+from extentions.addToWallet import WalletManagment
 from .serializers import *
 
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView, \
@@ -65,8 +65,8 @@ class PositionTotal(ListAPIView):
     permission_classes = (IsSuperUser,)
 
 
-class PositionOption(ListCreateAPIView):
-    serializer_class = PositionOptionSerializer
+class PositionOptionCreate(ListCreateAPIView):
+    serializer_class = PositionOptionCreateSerializer
     permission_classes = (UserPositionOption,)
 
     def get_queryset(self):
@@ -87,7 +87,7 @@ class PositionOption(ListCreateAPIView):
 
 
 class PositionOptionDetail(RetrieveUpdateDestroyAPIView):
-    serializer_class = PositionOptionSerializer
+    serializer_class = PositionOptionUpdateSerializer
     permission_classes = (UserPositionOption,)
     lookup_field = "in_position"
 
@@ -136,8 +136,11 @@ class PapertradingListView(ListCreateAPIView):
 
         try:
             serializer.save(user=user)
+            paper_trading = Paper_trading.objects.get(user=user)
+            WalletManagment.check("usdt", paper_trading.balance, paper_trading)
         except IntegrityError:
             raise serializers.ValidationError("You already have a paper account")
+
 
 
 class PapertradingDetail(RetrieveUpdateDestroyAPIView):
@@ -189,12 +192,12 @@ from extentions.validateWallet import ValidateWalletCoin
 def test(request):
     # results =WalletManagment.check("btc", -112, request.user)
     # results=WatchList_checker.check("btc","btc",request.user)
-    results=Position_option_checker.check()
+    # results=Position_option_checker.check()
     # paper_trading = Paper_trading.objects.filter(user__id=request.user.id)
     # print(paper_trading)
     # print(request.user.id)
     # results = ValidateWalletCoin.check("btc", 0.0010643646871144556, request.user.id)
-    # results=Position_checker.check()
+    results=Position_checker.check()
     return HttpResponse(results)
 
 def socket_test(request):

@@ -21,7 +21,7 @@ class CreatePaperTradingSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         key = list(data)
-        
+        print(data)
         if not 'balance' in key and 'enter_balance' in key: 
             
             if data['enter_balance']>0.0:
@@ -156,7 +156,7 @@ class PositionAddSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class PositionOptionSerializer(serializers.ModelSerializer):
+class PositionOptionUpdateSerializer(serializers.ModelSerializer):
     in_position = serializers.ReadOnlyField(source='in_position.id')
     trade_type = serializers.ReadOnlyField(source='w')
     oreder_reach_date = serializers.ReadOnlyField(source='')
@@ -186,6 +186,36 @@ class PositionOptionSerializer(serializers.ModelSerializer):
             
 
         print(is_valid)
+        
+
+    class Meta:
+        model = Position_option
+        fields ="__all__"
+
+class PositionOptionCreateSerializer(serializers.ModelSerializer):
+    in_position = serializers.ReadOnlyField(source='in_position.id')
+    trade_type = serializers.ReadOnlyField(source='w')
+    oreder_reach_date = serializers.ReadOnlyField(source='')
+    status = serializers.ReadOnlyField(source='')
+    def validate(self,data):
+        user = self.context['request'].user
+        view = self.context.get('view')
+        id = view.kwargs['pk']
+        position = Position.objects.get(id=id)
+        wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
+        position_amount = position.amount / position.entert_price
+        if position_amount>=data['amount'] :
+            wallet_result=WalletManagment.check(position.coin1, data['amount'] * -1, wallet.paper_trading)
+            if wallet_result == True:
+                if position.order_type == "m":
+                    data.update({'status':'w'})
+                elif position.order_type == "l":
+                    data.update({'status':'p'})
+                return data
+            else:
+                raise serializers.ValidationError(wallet_result)
+        else:
+            raise serializers.ValidationError("not enough coin in this position")
         
 
     class Meta:

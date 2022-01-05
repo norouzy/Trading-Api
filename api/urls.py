@@ -14,7 +14,7 @@ urlpatterns = [
 	path('user/positions/', PositionList.as_view()),
 	path('user/positions/create/', PositionCreate.as_view()),
 	path('user/positions/<int:pk>/', PositionCloseUpdate.as_view()),
-	path('user/positions/<int:pk>/option/create/', PositionOption.as_view()),
+	path('user/positions/<int:pk>/option/create/', PositionOptionCreate.as_view()),
 	path('user/positions/<int:in_position>/option/update/', PositionOptionDetail.as_view()),
 	path('user/positions/<int:in_position>/option/close/', PositionOptionClose.as_view()),
 	path('user/watch-list/',watchList_List.as_view()),
