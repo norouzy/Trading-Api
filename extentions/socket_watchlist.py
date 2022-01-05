@@ -4,9 +4,10 @@ from channels.db import database_sync_to_async
 import asyncio
 class WatchList_socket():
 	@database_sync_to_async
-	def check(user):
+	def check(self):
 		print("jo")
 		print(user)
-		data = Watch_list.objects.filter(user=user)
-		print(data)
+		data = Watch_list.objects.filter(user=self.user)
+		print(*data)
+
 		return data
