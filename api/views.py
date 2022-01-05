@@ -4,6 +4,8 @@ from django.db import IntegrityError
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
+from pycoingecko import CoinGeckoAPI
+
 from .serializers import *
 
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView, \
@@ -211,5 +213,24 @@ def socket_test(request):
 
 class coinListView(ListCreateAPIView):
     serializer_class = CoinListSerializer
-    permission_classes = IsSuperUser
+    # permission_classes = IsSuperUser
     queryset = Coin_list.objects.all()
+
+    def perform_create(self, serializer):
+        # coin = self.request.coin
+        print("------------------")
+        # print(coin)
+        print("------------------")
+        try:
+            serializer.save(coin="dish")
+        except IntegrityError:
+            raise serializers.ValidationError("You already have a paper account")
+
+
+
+def coinUpdateView(request):
+
+    if request.method == "POST":
+        # cg = CoinGeckoAPI()
+
+        Coin_list.objects.create(coin="btc")
