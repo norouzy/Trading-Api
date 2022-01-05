@@ -97,6 +97,16 @@ class PositionOptionDetail(RetrieveUpdateDestroyAPIView):
         query = Position_option.objects.filter(in_position=position_id, in_position__paper_trading__user=user)
         return query
 
+class PositionOptionClose(RetrieveUpdateDestroyAPIView):
+    serializer_class = PositionOptionCloseSerializer
+    permission_classes = (UserPositionOption,)
+    lookup_field = "in_position"
+
+    def get_queryset(self):
+        user = self.request.user
+        position_id = self.kwargs["in_position"]
+        query = Position_option.objects.filter(in_position=position_id, in_position__paper_trading__user=user)
+        return query
 
 class PapertradingViewSet(viewsets.ModelViewSet):
     serializer_class = CreatePaperTradingSerializer

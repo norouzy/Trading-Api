@@ -7,7 +7,7 @@ class ValidateWalletCoin():
 			wallet_coin = wallet_coin[0]
 			print(wallet_coin.coin)
 			if wallet_coin:
-				if wallet_coin.amount >= amount:
+				if wallet_coin.amount >= abs(amount):
 					return True
 				else:
 					return "not enough coin"

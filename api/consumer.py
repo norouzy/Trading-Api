@@ -1,7 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json,requests
 from asyncio import sleep
-from extentions.socket_watchlist import WatchList_socket
 import asyncio
 from api.models import Watch_list,Wallet, Position,Position_option
 from asgiref.sync import sync_to_async
@@ -100,7 +99,8 @@ class TradeConsumer(AsyncWebsocketConsumer):
 
     def get_multi_price_wallet(self,coins):
         coins = ",".join(coins)
-        url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins}&tsyms=USDT"
+        # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins}&tsyms=USDT"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins}&tsyms=USDT"
         response = requests.get(url)
         response = response.json()
         return response
@@ -108,7 +108,8 @@ class TradeConsumer(AsyncWebsocketConsumer):
     def get_multi_price_watchlist(self,coins):
         coins1 = ",".join(coins["coin1"])
         coins2 = ",".join(coins["coin2"])
-        url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins1}&tsyms={coins2}"
+        # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins1}&tsyms={coins2}"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}"
         response = requests.get(url)
         response = response.json()
         return response
@@ -133,9 +134,10 @@ class TradeConsumer(AsyncWebsocketConsumer):
                 "id":wallet.id,
                 "coin":wallet.coin,
                 "amount":wallet.amount,
-                "price":wallet_coin_price[(wallet.coin).upper()]['USDT']
+                "price":wallet_coin_price["RAW"][(wallet.coin).upper()]['USDT']["PRICE"],
+                "1HChange":wallet_coin_price["RAW"][(wallet.coin).upper()]['USDT']["CHANGEPCTHOUR"]
             }
-            tot_balance = tot_balance + wallet_coin_price[(wallet.coin).upper()]['USDT'] * wallet.amount
+            tot_balance = tot_balance + wallet_coin_price["RAW"][(wallet.coin).upper()]['USDT']["PRICE"] * wallet.amount
             data['wallet']["coin"].append(set_data)
         data['wallet']["balance"]=tot_balance
         return data
@@ -147,7 +149,8 @@ class TradeConsumer(AsyncWebsocketConsumer):
                 "id":watchlist.id,
                 "coin1":watchlist.coin1,
                 "coin2":watchlist.coin2,
-                "price": watchlist_coin_price[(watchlist.coin1).upper()][(watchlist.coin2).upper()]
+                "price": watchlist_coin_price["RAW"][(watchlist.coin1).upper()][(watchlist.coin2).upper()]["PRICE"],
+                "1HChange":watchlist_coin_price["RAW"][(watchlist.coin1).upper()][(watchlist.coin2).upper()]["CHANGEPCTHOUR"]
             } 
             data['watchlist'].append(set_data)
         return data
@@ -190,3 +193,4 @@ class TradeConsumer(AsyncWebsocketConsumer):
                 }
             data["position"].append(set_data)
         return data
+

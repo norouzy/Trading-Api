@@ -79,13 +79,14 @@ class Position_option(models.Model):
         ("t", "Take Profit"),
         ("s", "Stop loss"),
         ("w", "Working"),
+        ("c", "Close"),
     )
 
     STATUS_CHOICES = (
         ("p", "Pending"),
         ("w", "Working"),
         ("d", "Done"),
-        ("c", "close"),
+        ("c", "Close"),
     )
 
     in_position = models.OneToOneField(Position, on_delete=models.CASCADE, related_name="in_position", verbose_name="in_position")
