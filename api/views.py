@@ -14,7 +14,7 @@ from rest_framework.response import Response
 
 from .permissions import *
 
-from .models import Position
+from .models import Position, Coin_list
 
 User = get_user_model()
 
@@ -39,6 +39,7 @@ class PositionList(ListAPIView):
         user = self.request.user
         query = Position.objects.filter(paper_trading__user=user)
         return query
+
 
 class PositionCloseUpdate(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionCloseSerializer
@@ -143,10 +144,12 @@ class PapertradingDetail(RetrieveUpdateDestroyAPIView):
 class watchList_List(ListCreateAPIView):
     serializer_class = WatchListSerializer
     permission_classes = (IsUser,)
+
     def get_queryset(self):
         user = self.request.user
         query = Watch_list.objects.filter(user=user)
         return query
+
     def perform_create(self, serializer):
         user = self.request.user
         try:
@@ -154,17 +157,21 @@ class watchList_List(ListCreateAPIView):
         except IntegrityError:
             raise serializers.ValidationError("You already have a paper account")
 
+
 class watchList_Details(RetrieveDestroyAPIView):
     serializer_class = WatchListSerializer
     permission_classes = (UserWatchList,)
+
     def get_queryset(self):
         user = self.request.user
         query = Watch_list.objects.filter(user=user)
         return query
 
+
 class walletList(ListAPIView):
     serializer_class = WalletSerializer
     permission_classes = (IsUser,)
+
     def get_queryset(self):
         user = self.request.user
         query = Wallet.objects.filter(paper_trading__user=user)
@@ -176,10 +183,12 @@ from extentions.addToWallet import WalletManagment
 from extentions.checkPositions import Position_checker
 from extentions.checkPositionOption import Position_option_checker
 from extentions.validateWallet import ValidateWalletCoin
+
+
 def test(request):
     # results =WalletManagment.check("btc", -112, request.user)
     # results=WatchList_checker.check("btc","btc",request.user)
-    results=Position_option_checker.check()
+    results = Position_option_checker.check()
     # paper_trading = Paper_trading.objects.filter(user__id=request.user.id)
     # print(paper_trading)
     # print(request.user.id)
@@ -187,15 +196,20 @@ def test(request):
     # results=Position_checker.check()
     return HttpResponse(results)
 
+
 def socket_test(request):
-    data={'stock1':{'name':'Stock1','opening':45346,'closing':1234,'currentVal':56},
-    'stock2':{'name':'Stock2','opening':1889,'closing':234235,'currentVal':56},
-    'stock3':{'name':'Stock3','opening':1883,'closing':5346,'currentVal':56},
-    'stock4':{'name':'Stock4','opening':1884,'closing':56457,'currentVal':56},
-    'stock5':{'name':'Stock5','opening':1881,'closing':56457,'currentVal':56},
-    
-    }   
-    context={'data':data,'tableheader':['name','opening','closing','currentVal']}
-    return render(request,'index.html',context)
+    data = {'stock1': {'name': 'Stock1', 'opening': 45346, 'closing': 1234, 'currentVal': 56},
+            'stock2': {'name': 'Stock2', 'opening': 1889, 'closing': 234235, 'currentVal': 56},
+            'stock3': {'name': 'Stock3', 'opening': 1883, 'closing': 5346, 'currentVal': 56},
+            'stock4': {'name': 'Stock4', 'opening': 1884, 'closing': 56457, 'currentVal': 56},
+            'stock5': {'name': 'Stock5', 'opening': 1881, 'closing': 56457, 'currentVal': 56},
+
+            }
+    context = {'data': data, 'tableheader': ['name', 'opening', 'closing', 'currentVal']}
+    return render(request, 'index.html', context)
 
 
+class coinListView(ListCreateAPIView):
+    serializer_class = CoinListSerializer
+    permission_classes = IsSuperUser
+    queryset = Coin_list.objects.all()
