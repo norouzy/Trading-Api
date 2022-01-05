@@ -35,6 +35,7 @@ class CreatePaperTradingSerializer(serializers.ModelSerializer):
         model = Paper_trading
         fields = ["id","user", 'enter_balance']
 
+
 class UpdatePaperTradingSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
 
@@ -53,12 +54,11 @@ class UpdatePaperTradingSerializer(serializers.ModelSerializer):
         fields = ["id","user", 'balance']
 
 
-
 class PositionSerializer(serializers.ModelSerializer):
     def validate(self,data):
         coin1 = data['coin1']
         coin2 = data['coin2']
-        if  Coinlist.check(coin1) and Coinlist.check(coin2):
+        if Coinlist.check(coin1) and Coinlist.check(coin2):
             return data
         elif not Coinlist.check(coin1) and Coinlist.check(coin2):
             raise serializers.ValidationError("coin1 not found")
@@ -73,10 +73,14 @@ class PositionSerializer(serializers.ModelSerializer):
         model = Position
         fields = "__all__"
 
+
 class PositionCloseSerializer(serializers.ModelSerializer):
     status = serializers.ReadOnlyField(source='c')
     def validate(self,data):
         data.update({'status':'c'})
+        print("###########################")
+        print(self.context)
+        print("###########################")
         view = self.context.get('view')
         id = view.kwargs['pk']
         position = Position.objects.get(id=id)
@@ -85,7 +89,8 @@ class PositionCloseSerializer(serializers.ModelSerializer):
         return data
     class Meta:
         model = Position
-        fields = ['status',]
+        fields = ['status', ]
+
 
 class PositionAddSerializer(serializers.ModelSerializer):
     paper_trading = serializers.ReadOnlyField(source='paper_trading.id')
@@ -154,7 +159,6 @@ class PositionAddSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class PositionOptionSerializer(serializers.ModelSerializer):
     in_position = serializers.ReadOnlyField(source='in_position.id')
     trade_type = serializers.ReadOnlyField(source='w')
@@ -175,6 +179,7 @@ class PositionOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Position_option
         fields ="__all__"
+
 
 class WalletSerializer(serializers.ModelSerializer):
     class Meta :
@@ -206,6 +211,12 @@ class WatchListSerializer(serializers.ModelSerializer):
         if not results:
             raise serializers.ValidationError("repeative coin")
         return data
+    class Meta:
+        model = Watch_list
+        fields = "__all__"
+
+
+class CoinListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Watch_list
         fields = "__all__"
