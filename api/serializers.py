@@ -270,3 +270,15 @@ class WatchListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Watch_list
         fields = "__all__"
+
+class CoinListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        coins = [Coin_list(**item) for item in validated_data]
+        return Coin_list.objects.bulk_create(coins)
+
+class CoinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coin_list
+        fields = "__all__"
+        list_serializer_class = CoinListSerializer
+
