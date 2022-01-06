@@ -97,9 +97,10 @@ class PositionAddSerializer(serializers.ModelSerializer):
     status = serializers.ReadOnlyField(source='w')
     oreder_reach_date = serializers.ReadOnlyField(source='')
     def validate(self,data):
+        print(data)
         coin1 = data['coin1']
         coin2 = data['coin2']
-        if  Coinlist.check(coin1) and Coinlist.check(coin2):
+        if Coinlist.check(coin1) and Coinlist.check(coin2):
             user_id = self.context['request'].user.id
             paper_trading = Paper_trading.objects.get(user__id=user_id)
             if data['order_type'] =="l":
@@ -181,6 +182,7 @@ class PositionOptionSerializer(serializers.ModelSerializer):
         fields ="__all__"
 
 
+
 class WalletSerializer(serializers.ModelSerializer):
     class Meta :
         model =Wallet
@@ -216,10 +218,19 @@ class WatchListSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CoinListSerializer(serializers.ModelSerializer):
+
+class CoinListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        coins = [Coin_list(**item) for item in validated_data]
+        return Coin_list.objects.bulk_create(coins)
+
+class CoinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coin_list
         fields = "__all__"
+        list_serializer_class = CoinListSerializer
+
+
 
 
 
