@@ -24,7 +24,7 @@ class Paper_trading(models.Model):
 
 
 class Coin_list(models.Model):
-    coin = models.CharField(max_length=20)
+    coin = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.coin
