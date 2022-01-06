@@ -26,7 +26,7 @@ urlpatterns = [
 	path('test/', test, name="test"),
 	path('sokect_test/', socket_test,name="socket_test"),
 
-	path('coinlist-udate/', coinListView.as_view()),
+	path('coinlist/', coinListView.as_view()),
 
 	path('', include(router.urls))
 ]
