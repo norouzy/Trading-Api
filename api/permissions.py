@@ -62,3 +62,15 @@ class IsStaffOrReadOnly(BasePermission):
 				request.user and
 				request.user.is_staff
 			)
+
+
+class IsSuperUserOrReadOnly(BasePermission):
+	def has_permission(self, request, view):
+		if request.method == "POST":
+			return bool(
+				request.user.is_authenticated and
+				request.user.is_superuser
+				)
+		else:
+			return True
+
