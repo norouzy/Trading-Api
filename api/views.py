@@ -3,10 +3,16 @@ from django.http import HttpResponse, JsonResponse
 from django.db import IntegrityError
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.views.decorators.csrf import csrf_exempt
 
 from pycoingecko import CoinGeckoAPI
+from rest_framework import status
+from rest_framework.parsers import JSONParser
+
 
 from .serializers import *
+
+from rest_framework.views import APIView
 
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView, \
     RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, CreateAPIView, ListAPIView, UpdateAPIView
@@ -212,25 +218,34 @@ def socket_test(request):
 
 
 class coinListView(ListCreateAPIView):
-    serializer_class = CoinListSerializer
-    # permission_classes = IsSuperUser
+    serializer_class = CoinSerializer
+    permission_classes = (IsSuperUserOrReadOnly,)
     queryset = Coin_list.objects.all()
 
-    def perform_create(self, serializer):
-        # coin = self.request.coin
-        print("------------------")
-        # print(coin)
-        print("------------------")
-        try:
-            serializer.save(coin="dish")
-        except IntegrityError:
-            raise serializers.ValidationError("You already have a paper account")
 
+    def create(self, request, *args, **kwargs):
+        # GET LAST COINS IN DB
+        lastCoins = Coin_list.objects.values_list('coin')
+        lastCoins = [coin[0] for coin in lastCoins]
 
+        # GET TOTAL CRYPTO COINS
+        cg = CoinGeckoAPI()
+        data = []
+        get_coins = [i['symbol'] for i in cg.get_coins_list()]
 
-def coinUpdateView(request):
+        # REMOVE DUPLICATED AND EXISTED COINS
+        for elem in get_coins:
+            if elem not in lastCoins and len(elem)<20:
+                data.append({'coin':elem})
 
-    if request.method == "POST":
-        # cg = CoinGeckoAPI()
+        # SEND DATA TO SERIALIZER
+        serializer = self.get_serializer(data=data, many=True)
 
-        Coin_list.objects.create(coin="btc")
+        # SERIALIZER VALIDATION
+        serializer.is_valid(raise_exception=True)
+
+        # CREATE AND SAVE NEW COINS TO DB
+        self.perform_create(serializer)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
