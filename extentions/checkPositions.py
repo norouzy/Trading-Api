@@ -3,6 +3,8 @@ import requests
 import calendar, time
 from .addToWallet import WalletManagment
 from .UpdatePositionOption import UpdatePositionOption
+import datetime
+
 class Position_checker():
 	def requestPrice(coin1,coin2):
 		data = f"https://min-api.cryptocompare.com/data/v2/histohour?fsym={coin1}&tsym={coin2}&limit=1"
@@ -42,9 +44,19 @@ class Position_checker():
 		response = requests.get(data)
 		response = response.json()
 		return response[coin2.upper()]
+	
 	def position_update_status(typeTrade,pos):
 		achive_position=Position.objects.get(id=pos.id)
 		achive_position.status = typeTrade
+		achive_position.save()
+		return True
+
+	def position_oreder_reach_date_update(status,pos):
+		achive_position=Position.objects.get(id=pos.id)
+		if status =="ok":
+			achive_position.oreder_reach_date = datetime.datetime.now()
+		else:
+			achive_position.oreder_reach_date = ""
 		achive_position.save()
 		return True
 
@@ -60,19 +72,21 @@ class Position_checker():
 						timestamp = Position_checker.timeToTimeStamp(pos)
 						timeDifference = prices["time1"] - timestamp
 						if timeDifference >= 0 or True:
+							print(prices)
 							if pos.entert_price>= prices["min"] and pos.entert_price<=prices["max"]:
 								if pos.trade_type =="b":
 									try :
 										result =Position_checker.position_update_status("d", pos)
-										# result = True
 									except:
 										result = ""
 									if result:
 										try :
+											update_order_date=Position_checker.position_oreder_reach_date_update("ok",pos)
 											coin1_amount =pos.amount / pos.entert_price
 											add_result = WalletManagment.check(pos.coin1, coin1_amount, pos.paper_trading)
 										except:
 											add_result = ""
+											update_order_date = ""
 										if add_result :
 											
 											try:
@@ -83,9 +97,10 @@ class Position_checker():
 
 											if is_positionOption:
 												UpdatePositionOption.check(pos,"w")
-												WalletManagment.check(pos.coin1, pos.amount*-1, pos.paper_trading)
+												WalletManagment.check(pos.coin1, is_positionOption.amount*-1, pos.paper_trading)
 										else:
 											Position_checker.position_update_status("w", pos)
+											Position_checker.position_oreder_reach_date_update("back",pos)
 								elif pos.trade_type == "s":
 									try :
 										result =Position_checker.position_update_status("d", pos)
@@ -103,9 +118,7 @@ class Position_checker():
 											print("hi")
 											Position_checker.position_update_status("w", pos)
 								
-											
-
-											
+																		
 
 	def check():
 		positions = Position.objects.filter(order_type="l")

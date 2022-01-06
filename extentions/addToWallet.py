@@ -2,8 +2,6 @@ from api.models import Wallet,Paper_trading
 
 class WalletManagment():
 	def check(coin,amount,paper_trading):
-		
-		
 		data = Wallet.objects.filter(coin=coin,paper_trading=paper_trading)
 		data = data.first()
 		if not data == None:

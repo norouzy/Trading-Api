@@ -3,6 +3,7 @@ import requests
 import calendar, time
 from .addToWallet import WalletManagment
 from .UpdatePositionOption import UpdatePositionOption
+import datetime
 class Position_option_checker():
 	def requestPrice(coin1,coin2):
 		data = f"https://min-api.cryptocompare.com/data/v2/histohour?fsym={coin1}&tsym={coin2}&limit=1"
@@ -47,9 +48,18 @@ class Position_option_checker():
 		Position_option.objects.filter(in_position=pos).update(status=status,trade_type=closeType)
 		return True
 
+	def position_oreder_reach_date_update(status,option):
+		achive_position=Position_option.objects.get(id=option.id)
+		if status =="ok":
+			achive_position.oreder_reach_date = datetime.datetime.now()
+		else:
+			achive_position.oreder_reach_date = ""
+		achive_position.save()
+		return True
+
 	def position_option_process(pos,trade_type,position_option):
 		try :
-			result =Position_option_checker.position_option_update_status("c", pos,trade_type)
+			result =Position_option_checker.position_option_update_status("d", pos,trade_type)
 			# result = True
 		except:
 			result = ""
@@ -78,8 +88,10 @@ class Position_option_checker():
 							position_option=position_option[0]
 							if position_option.take_profit>= prices["min"] and position_option.take_profit<=prices["max"]:
 								Position_option_checker.position_option_process(pos, "t",position_option)
+								Position_option_checker.position_oreder_reach_date_update("ok",position_option)
 							elif position_option.stoploss>= prices["min"] and position_option.stoploss<=prices["max"]:
 								Position_option_checker.position_option_process(pos, "s",position_option)
+								Position_option_checker.position_oreder_reach_date_update("ok",position_option)
 									
 										
 											

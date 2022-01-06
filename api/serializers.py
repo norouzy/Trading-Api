@@ -4,6 +4,7 @@ from .models import *
 from extentions.checkCoin import Coinlist
 from extentions.addToWallet import WalletManagment
 from extentions.validateWallet import ValidateWalletCoin
+from extentions.addToWallet import WalletManagment
 from extentions.CoinPrice import PriceChecker
 # from extentions.watchList import WatchList_checker
 User = get_user_model()
@@ -20,7 +21,7 @@ class CreatePaperTradingSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         key = list(data)
-        
+        print(data)
         if not 'balance' in key and 'enter_balance' in key: 
             
             if data['enter_balance']>0.0:
@@ -34,7 +35,6 @@ class CreatePaperTradingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Paper_trading
         fields = ["id","user", 'enter_balance']
-
 
 class UpdatePaperTradingSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
@@ -54,11 +54,12 @@ class UpdatePaperTradingSerializer(serializers.ModelSerializer):
         fields = ["id","user", 'balance']
 
 
+
 class PositionSerializer(serializers.ModelSerializer):
     def validate(self,data):
         coin1 = data['coin1']
         coin2 = data['coin2']
-        if Coinlist.check(coin1) and Coinlist.check(coin2):
+        if  Coinlist.check(coin1) and Coinlist.check(coin2):
             return data
         elif not Coinlist.check(coin1) and Coinlist.check(coin2):
             raise serializers.ValidationError("coin1 not found")
@@ -73,14 +74,10 @@ class PositionSerializer(serializers.ModelSerializer):
         model = Position
         fields = "__all__"
 
-
 class PositionCloseSerializer(serializers.ModelSerializer):
     status = serializers.ReadOnlyField(source='c')
     def validate(self,data):
         data.update({'status':'c'})
-        print("###########################")
-        print(self.context)
-        print("###########################")
         view = self.context.get('view')
         id = view.kwargs['pk']
         position = Position.objects.get(id=id)
@@ -89,7 +86,7 @@ class PositionCloseSerializer(serializers.ModelSerializer):
         return data
     class Meta:
         model = Position
-        fields = ['status', ]
+        fields = ['status',]
 
 
 class PositionAddSerializer(serializers.ModelSerializer):
@@ -97,10 +94,9 @@ class PositionAddSerializer(serializers.ModelSerializer):
     status = serializers.ReadOnlyField(source='w')
     oreder_reach_date = serializers.ReadOnlyField(source='')
     def validate(self,data):
-        print(data)
         coin1 = data['coin1']
         coin2 = data['coin2']
-        if Coinlist.check(coin1) and Coinlist.check(coin2):
+        if  Coinlist.check(coin1) and Coinlist.check(coin2):
             user_id = self.context['request'].user.id
             paper_trading = Paper_trading.objects.get(user__id=user_id)
             if data['order_type'] =="l":
@@ -160,35 +156,93 @@ class PositionAddSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class PositionOptionSerializer(serializers.ModelSerializer):
+class PositionOptionUpdateSerializer(serializers.ModelSerializer):
     in_position = serializers.ReadOnlyField(source='in_position.id')
     trade_type = serializers.ReadOnlyField(source='w')
-    status = serializers.ReadOnlyField(source='p')
     oreder_reach_date = serializers.ReadOnlyField(source='')
     status = serializers.ReadOnlyField(source='')
     def validate(self,data):
+        user = self.context['request'].user
+        new_amount = data['amount']
+        # print(new_amount)
         view = self.context.get('view')
-        id = view.kwargs['pk']
+        id = view.kwargs['in_position']
         position = Position.objects.get(id=id)
-        print(position)
+        position_option = Position_option.objects.get(in_position=position)
+        wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
+        print(position_option.amount - new_amount)
+        print(position.coin1)
+
         position_amount = position.amount / position.entert_price
-        if position_amount>=data['amount']:
-            return data
+        if position_amount>=data['amount'] :
+            wallet_result=WalletManagment.check(position.coin1, position_option.amount - new_amount, wallet.paper_trading)
+            print(wallet_result)
+            if wallet_result == True:
+                return data
+            else:
+                raise serializers.ValidationError(wallet_result)
         else:
             raise serializers.ValidationError("not enough coin")
+            
+
+        print(is_valid)
+        
 
     class Meta:
         model = Position_option
         fields ="__all__"
 
+class PositionOptionCreateSerializer(serializers.ModelSerializer):
+    in_position = serializers.ReadOnlyField(source='in_position.id')
+    trade_type = serializers.ReadOnlyField(source='w')
+    oreder_reach_date = serializers.ReadOnlyField(source='')
+    status = serializers.ReadOnlyField(source='')
+    def validate(self,data):
+        user = self.context['request'].user
+        view = self.context.get('view')
+        id = view.kwargs['pk']
+        position = Position.objects.get(id=id)
+        wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
+        position_amount = position.amount / position.entert_price
+        if position_amount>=data['amount'] :
+            wallet_result=WalletManagment.check(position.coin1, data['amount'] * -1, wallet.paper_trading)
+            if wallet_result == True:
+                if position.order_type == "m":
+                    data.update({'status':'w'})
+                elif position.order_type == "l":
+                    data.update({'status':'p'})
+                return data
+            else:
+                raise serializers.ValidationError(wallet_result)
+        else:
+            raise serializers.ValidationError("not enough coin in this position")
+        
 
+    class Meta:
+        model = Position_option
+        fields ="__all__"
 
 class WalletSerializer(serializers.ModelSerializer):
     class Meta :
         model =Wallet
         fields = "__all__"
 
-
+class PositionOptionCloseSerializer(serializers.ModelSerializer):
+    status = serializers.ReadOnlyField(source='c')
+    trade_type = serializers.ReadOnlyField(source='c')
+    def validate(self,data):
+        data.update({'status':'c','trade_type':'c'})
+        user = self.context['request'].user
+        view = self.context.get('view')
+        id = view.kwargs['in_position']
+        position = Position.objects.get(id=id)
+        position_option = Position_option.objects.get(in_position=position)
+        # back coin to user wallet after position close
+        WalletManagment.check(position.coin1, position_option.amount, position.paper_trading)
+        return data
+    class Meta:
+        model = Position_option
+        fields = ['status','trade_type',]
 
 class WatchListSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
@@ -216,21 +270,3 @@ class WatchListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Watch_list
         fields = "__all__"
-
-
-
-class CoinListSerializer(serializers.ListSerializer):
-    def create(self, validated_data):
-        coins = [Coin_list(**item) for item in validated_data]
-        return Coin_list.objects.bulk_create(coins)
-
-class CoinSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Coin_list
-        fields = "__all__"
-        list_serializer_class = CoinListSerializer
-
-
-
-
-
