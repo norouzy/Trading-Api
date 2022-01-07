@@ -58,6 +58,15 @@ class PositionCloseUpdate(RetrieveUpdateDestroyAPIView):
         query = Position.objects.filter(paper_trading__user=user)
         return query
 
+    def delete(self, request, *args, **kwargs):
+        user = self.request.user
+        id = self.kwargs["pk"]
+        position = Position.objects.get(id=id, paper_trading__user=user)
+        if not position.status == "w":
+            raise serializers.ValidationError("this position reached or closed ! you cant edit it")
+        else:
+            return self.destroy(request, *args, **kwargs)
+
 
 class PositionCreate(CreateAPIView):
     serializer_class = PositionAddSerializer
