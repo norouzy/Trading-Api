@@ -215,8 +215,11 @@ class PositionOptionCreateSerializer(serializers.ModelSerializer):
             if position_amount>=data['amount'] :
                 wallet_result=WalletManagment.check(position.coin1, data['amount'] * -1, wallet.paper_trading)
                 if wallet_result == True:
-                    data.update({'status':'w'})
-                    return data
+                    if not data['stoploss'] and not data['take_profit']:
+                        raise serializers.ValidationError("one of take_profit or stoploss should be fill !")
+                    else:
+                        data.update({'status':'p'})
+                        return data
                 else:
                     raise serializers.ValidationError(wallet_result)
             else:
@@ -224,8 +227,11 @@ class PositionOptionCreateSerializer(serializers.ModelSerializer):
         elif position.order_type == "l":
             if position_amount>=data['amount'] :
                 if position.order_type == "l":
-                    data.update({'status':'p'})
-                    return data
+                    if not data['stoploss'] and not data['take_profit']:
+                        raise serializers.ValidationError("one of take_profit or stoploss should be fill !")
+                    else:
+                        data.update({'status':'p'})
+                        return data
             else:
                 raise serializers.ValidationError("not enough coin in this position")
 
