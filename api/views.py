@@ -170,7 +170,6 @@ class PapertradingListView(ListCreateAPIView):
             raise serializers.ValidationError("You already have a paper account")
 
 
-
 class PapertradingDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = UpdatePaperTradingSerializer
     permission_classes = (UserPapertrading,)
