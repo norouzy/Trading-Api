@@ -2,7 +2,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 import json,requests
 from asyncio import sleep
 import asyncio
-from api.models import Watch_list,Wallet, Position,Position_option
+from api.models import Watch_list,Wallet, Position,Position_option, Paper_trading
 from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
@@ -11,6 +11,12 @@ class TradeConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.user = self.scope['user']
+
+        try:
+            self.p_count = int(str(self.scope['query_string']).split('&p=')[1].split('\'')[0])
+        except:
+            self.p_count = 10
+
         self.group_name='tableData'
         await self.channel_layer.group_add(
             self.group_name,
@@ -38,37 +44,60 @@ class TradeConsumer(AsyncWebsocketConsumer):
         while True:
             wallet_coin = []
             watchlist_coin = {"coin1": [], "coin2": []}
-            data = {
-                "watchlist": [],
-                "wallet": {
-                    "coin": [], "balance": 0
-                },
-                "position": [],
-                coin1+"/"+coin2: 0,
-            }
+
             
             # get models data
-            positions = await self.get_position()
-            watchlists = await self.get_watchlist()
-            wallets = await self.get_wallet()
+            if self.user.is_authenticated:
+                data = {
+                    "watchlist": [],
+                    "wallet": {
+                        "coin": [], "balance": 0
+                    },
+                    "position": [],
+                    "last_positions": [],
+                    coin1 + "/" + coin2: 0,
+                }
 
-            # get coin name and save it in array to get multi price
-            for wallet in wallets:
-                wallet_coin.append(wallet.coin)
-            for watchlist in watchlists:
-                watchlist_coin["coin1"].append(watchlist.coin1)
-                watchlist_coin["coin2"].append(watchlist.coin2)
-            
+                checked_paper = await self.check_paper_trading()
 
-            # add data to json 
-            data = self.wallet(data, wallets, wallet_coin)
-            data = self.watchlist(data, watchlists, watchlist_coin)
+                positions = await self.get_position()
+                watchlists = await self.get_watchlist()
+                wallets = await self.get_wallet()
 
-            data[coin1+"/"+coin2] = self.get_price(coin1, coin2)[coin2.upper()]
-            
-            for position in positions:
-                position_option = await self.get_position_option(position.id)
-                data = self.position_option(data, position_option, position)
+                # get coin name and save it in array to get multi price
+                for wallet in wallets:
+                    wallet_coin.append(wallet.coin)
+                for watchlist in watchlists:
+                    watchlist_coin["coin1"].append(watchlist.coin1)
+                    watchlist_coin["coin2"].append(watchlist.coin2)
+
+                # add data to json
+                data = self.wallet(data, wallets, wallet_coin)
+                data = self.watchlist(data, watchlists, watchlist_coin)
+
+                # SET USER POSITIONS
+                for position in positions:
+                    position_option = await self.get_position_option(position.id)
+                    data = self.position_option(data, position_option, position)
+
+                if not checked_paper:
+                    data['position'] = 'Paper trading does not exist'
+                    data['wallet'] = 'Paper trading does not exist'
+            else:
+                data = {
+                    "last_positions": [],
+                    coin1 + "/" + coin2: 0,
+                }
+
+            # GET COIN PRICE
+            data[coin1 + "/" + coin2] = self.get_price(coin1, coin2)[coin2.upper()]
+
+            # GET LAST POSITIONS
+            last_positions = await self.get_last_positions(self.p_count)
+
+            # SET LAST POSITIONS
+            for position in last_positions:
+                data = self.set_last_positions(data, position)
 
             await self.send(json.dumps(data))
             await sleep(1)
@@ -87,9 +116,22 @@ class TradeConsumer(AsyncWebsocketConsumer):
         return results
 
     @database_sync_to_async
+    def get_last_positions(self, count=10):
+        results = list(Position.objects.all().order_by('-oreder_set_date')[:count])
+        return results
+
+    @database_sync_to_async
     def get_position_option(self, id):
         return list(Position_option.objects.all().filter(in_position=id))
-    
+
+    @database_sync_to_async
+    def check_paper_trading(self):
+        paper = Paper_trading.objects.filter(user=self.user)
+        if paper:
+            return True
+        else:
+            return False
+
     def time_format(self, position):
         return str(position.year)+"-"+str(position.month)+"-"+str(position.day)+" "+str(position.hour)+":"+str(position.minute)
 
@@ -189,4 +231,22 @@ class TradeConsumer(AsyncWebsocketConsumer):
                 }
             data["position"].append(set_data)
         return data
+
+    def set_last_positions(self, data, position):
+        set_data = {
+            "id": position.id,
+            "trade_type": position.trade_type,
+            "order_type": position.order_type,
+            "coin1": position.coin1,
+            "coin2": position.coin2,
+            "entert_price": position.entert_price,
+            "amount": position.amount,
+            "status": position.status,
+            "oreder_set_date": self.time_format(position.oreder_set_date) if position.oreder_set_date else "",
+            "oreder_reach_date": self.time_format(position.oreder_reach_date) if position.oreder_reach_date else "",
+        }
+        data["last_positions"].append(set_data)
+
+        return data
+
 
