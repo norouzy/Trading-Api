@@ -169,24 +169,31 @@ class PositionOptionUpdateSerializer(serializers.ModelSerializer):
         id = view.kwargs['in_position']
         position = Position.objects.get(id=id)
         position_option = Position_option.objects.get(in_position=position)
-        wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
-        print(position_option.amount - new_amount)
-        print(position.coin1)
-
-        position_amount = position.amount / position.entert_price
-        if position_amount>=data['amount'] :
-            wallet_result=WalletManagment.check(position.coin1, position_option.amount - new_amount, wallet.paper_trading)
-            print(wallet_result)
-            if wallet_result == True:
-                return data
-            else:
-                raise serializers.ValidationError(wallet_result)
+        if not position_option.status == "w" and not position_option.trade_type == "w" or not position_option.status == "p" and not position_option.status == "w":
+            raise serializers.ValidationError("this position reached or closed !")
         else:
-            raise serializers.ValidationError("not enough coin")
+            wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
+            print(position_option.amount - new_amount)
+            print(position.coin1)
+
+            position_amount = position.amount / position.entert_price
+            if position_amount>=data['amount'] :
+                wallet_result=WalletManagment.check(position.coin1, position_option.amount - new_amount, wallet.paper_trading)
+                print(wallet_result)
+                if wallet_result == True:
+                    return data
+                else:
+                    raise serializers.ValidationError(wallet_result)
+            else:
+                raise serializers.ValidationError("not enough coin")
             
 
         print(is_valid)
         
+
+    class Meta:
+        model = Position_option
+        fields ="__all__"
 
     class Meta:
         model = Position_option
@@ -202,20 +209,26 @@ class PositionOptionCreateSerializer(serializers.ModelSerializer):
         view = self.context.get('view')
         id = view.kwargs['pk']
         position = Position.objects.get(id=id)
-        wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
         position_amount = position.amount / position.entert_price
-        if position_amount>=data['amount'] :
-            wallet_result=WalletManagment.check(position.coin1, data['amount'] * -1, wallet.paper_trading)
-            if wallet_result == True:
-                if position.order_type == "m":
+        if position.order_type == "m":
+            wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
+            if position_amount>=data['amount'] :
+                wallet_result=WalletManagment.check(position.coin1, data['amount'] * -1, wallet.paper_trading)
+                if wallet_result == True:
                     data.update({'status':'w'})
-                elif position.order_type == "l":
-                    data.update({'status':'p'})
-                return data
+                    return data
+                else:
+                    raise serializers.ValidationError(wallet_result)
             else:
-                raise serializers.ValidationError(wallet_result)
-        else:
-            raise serializers.ValidationError("not enough coin in this position")
+                raise serializers.ValidationError("not enough coin in this position")
+        elif position.order_type == "l":
+            if position_amount>=data['amount'] :
+                if position.order_type == "l":
+                    data.update({'status':'p'})
+                    return data
+            else:
+                raise serializers.ValidationError("not enough coin in this position")
+
         
 
     class Meta:

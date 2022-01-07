@@ -95,7 +95,7 @@ class PositionOptionCreate(ListCreateAPIView):
             raise serializers.ValidationError("You already have a position option")
 
 
-class PositionOptionDetail(RetrieveUpdateDestroyAPIView):
+class PositionOptionUpdate(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionOptionUpdateSerializer
     permission_classes = (UserPositionOption,)
     lookup_field = "in_position"
@@ -105,6 +105,15 @@ class PositionOptionDetail(RetrieveUpdateDestroyAPIView):
         position_id = self.kwargs["in_position"]
         query = Position_option.objects.filter(in_position=position_id, in_position__paper_trading__user=user)
         return query
+    def delete(self, request, *args, **kwargs):
+        user = self.request.user
+        position_id = self.kwargs["in_position"]
+        position_option = Position_option.objects.get(in_position=position_id, in_position__paper_trading__user=user)
+        if not position_option.status == "w" and not position_option.trade_type == "w" or not position_option.status == "p" and not position_option.status == "w":
+            raise serializers.ValidationError("this position reached or closed ! you cant edit it")
+        else:
+            return self.destroy(request, *args, **kwargs)
+
 
 class PositionOptionClose(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionOptionCloseSerializer
