@@ -1,4 +1,4 @@
-from channels.routing import ProtocolTypeRouter,URLRouter
+from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from django.urls import path
 from api import consumer
@@ -6,11 +6,12 @@ from api import consumer
 from django_channels_jwt_auth_middleware.auth import JWTAuthMiddlewareStack
 
 ws_pattern= [
-    path('ws/tableData/',consumer.TradeConsumer.as_asgi()),
+    path('ws/tableData/', consumer.TradeConsumer.as_asgi()),
+    path('ws/homeData/', consumer.HomePageConsumer.as_asgi()),
 ]
 
-application= ProtocolTypeRouter(
+application = ProtocolTypeRouter(
     {
-        'websocket':JWTAuthMiddlewareStack(URLRouter(ws_pattern))
+        'websocket': JWTAuthMiddlewareStack(URLRouter(ws_pattern))
     }
 )
