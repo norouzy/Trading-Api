@@ -279,6 +279,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
 class HomePageConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
+        self.user = self.scope['user']
         self.group_name = 'homeData'
         await self.channel_layer.group_add(
             self.group_name,
@@ -327,6 +328,19 @@ class HomePageConsumer(AsyncWebsocketConsumer):
                 "top_coins": [],
             }
 
+            if self.user.is_authenticated:
+                data["watchlist"] = []
+                watchlist_coin = {"coin1": [], "coin2": []}
+                watchlists = await self.get_watchlist()
+
+                for watchlist in watchlists:
+                    watchlist_coin["coin1"].append(watchlist.coin1)
+                    watchlist_coin["coin2"].append(watchlist.coin2)
+
+                data = self.watchlist(data, watchlists, watchlist_coin)
+
+
+
             # GET LAST POSITIONS
             last_positions = await self.get_last_positions(last_positions_count)
 
@@ -348,6 +362,10 @@ class HomePageConsumer(AsyncWebsocketConsumer):
     def get_last_positions(self, count):
         results = list(Position.objects.all().order_by('-oreder_set_date')[:count])
         return results
+
+    @database_sync_to_async
+    def get_watchlist(self):
+        return list(Watch_list.objects.all().filter(user=self.user))
 
     def get_top_coins(self, top_coins_count, page):
         url = f"https://min-api.cryptocompare.com/data/top/mktcapfull?limit={top_coins_count}&tsym=USD&page={page}"
@@ -394,4 +412,26 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         }
         data['top_coins'].append(set_data)
         return data
+
+    def watchlist(self, data, watchlists, watchlist_coin):
+        watchlist_coin_price = self.get_multi_price_watchlist(watchlist_coin)
+        for watchlist in watchlists:
+            set_data = {
+                "id": watchlist.id,
+                "coin1": watchlist.coin1,
+                "coin2": watchlist.coin2,
+                "price": watchlist_coin_price["RAW"][(watchlist.coin1).upper()][(watchlist.coin2).upper()]["PRICE"],
+                "1HChange": watchlist_coin_price["RAW"][(watchlist.coin1).upper()][(watchlist.coin2).upper()]["CHANGEPCTHOUR"]
+            }
+            data['watchlist'].append(set_data)
+        return data
+
+    def get_multi_price_watchlist(self, coins):
+        coins1 = ",".join(coins["coin1"])
+        coins2 = ",".join(coins["coin2"])
+        # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins1}&tsyms={coins2}"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}"
+        response = requests.get(url)
+        response = response.json()
+        return response
 
