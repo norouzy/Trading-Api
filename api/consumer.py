@@ -380,6 +380,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         coinImg = "https://www.cryptocompare.com/"+coin['CoinInfo']['ImageUrl']
         marketCap = res['MKTCAP']
         changePctIn24h = coin['coinInfo']['CHANGEPCT24HOUR']
+        priceDiagram = f"https://images.cryptocompare.com/sparkchart/{name}/USD/latest.png"
 
         set_data = {
             'coin': name,
@@ -388,6 +389,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
             'coinImg': coinImg,
             'marketCap': marketCap,
             'changePctIn24h': changePctIn24h,
+            'priceDiagram': priceDiagram
 
         }
         data['top_coins'].append(set_data)
