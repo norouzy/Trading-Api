@@ -316,6 +316,11 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         except:
             top_coins_count = 50
 
+        # TOP COINS PAGE
+        try:
+            top_coins_page = val['page']
+        except:
+            top_coins_page = 0
         while True:
             data = {
                 "last_positions": [],
@@ -326,7 +331,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
             last_positions = await self.get_last_positions(last_positions_count)
 
             # GET TOP COINS
-            top_coins = self.get_top_coins(top_coins_count)
+            top_coins = self.get_top_coins(top_coins_count, top_coins_page)
 
             # SET LAST POSITIONS
             for position in last_positions:
@@ -344,8 +349,8 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         results = list(Position.objects.all().order_by('-oreder_set_date')[:count])
         return results
 
-    def get_top_coins(self, top_coins_count):
-        url = f"https://min-api.cryptocompare.com/data/top/mktcapfull?limit={top_coins_count}&tsym=USD"
+    def get_top_coins(self, top_coins_count, page):
+        url = f"https://min-api.cryptocompare.com/data/top/mktcapfull?limit={top_coins_count}&tsym=USD&page={page}"
         response = requests.get(url)
         response = response.json()
         return response

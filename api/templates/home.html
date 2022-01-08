@@ -5,7 +5,7 @@
         alert('Connection established');
     };
     socket.onopen = function () {
-        socket.send(JSON.stringify({'tcc': 2, 'lpc': 2}));
+        socket.send(JSON.stringify({'tcc': 2, 'page':1 ,'lpc': 2}));
     }
 
 
