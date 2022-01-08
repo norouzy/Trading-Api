@@ -308,18 +308,33 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         except:
             last_positions_count = 10
 
+        # TOP COINS COUNT
+        try:
+            top_coins_count = val['tcc']
+            if top_coins_count > 100:
+                top_coins_count = 100
+        except:
+            top_coins_count = 50
 
         while True:
             data = {
                 "last_positions": [],
+                "top_coins": [],
             }
 
             # GET LAST POSITIONS
             last_positions = await self.get_last_positions(last_positions_count)
 
+            # GET TOP COINS
+            top_coins = self.get_top_coins(top_coins_count)
+
             # SET LAST POSITIONS
             for position in last_positions:
                 data = self.set_last_positions(data, position)
+
+            # SET TOP COINS
+            for coin in top_coins['Data']:
+                data = self.set_top_coins(data, coin)
 
             await self.send(json.dumps(data))
             await sleep(1)
@@ -328,6 +343,12 @@ class HomePageConsumer(AsyncWebsocketConsumer):
     def get_last_positions(self, count):
         results = list(Position.objects.all().order_by('-oreder_set_date')[:count])
         return results
+
+    def get_top_coins(self, top_coins_count):
+        url = f"https://min-api.cryptocompare.com/data/top/mktcapfull?limit={top_coins_count}&tsym=USD"
+        response = requests.get(url)
+        response = response.json()
+        return response
 
     def set_last_positions(self, data, position):
         set_data = {
@@ -345,3 +366,17 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         data["last_positions"].append(set_data)
 
         return data
+
+    def set_top_coins(self, data, coin):
+        res = coin['RAW']['USD']
+        name = res['FROMSYMBOL']
+        price = res['PRICE']
+        val24h = res['VOLUME24HOUR']
+        set_data = {
+             'coin': name,
+             'price': price,
+             'val24h': val24h
+        }
+        data['top_coins'].append(set_data)
+        return data
+
