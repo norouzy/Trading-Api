@@ -10,10 +10,16 @@ class IsSuperUser(BasePermission):
 				request.user.is_superuser
 			)
 
+class Is_Authenticated(BasePermission):
+	def has_permission(self, request, view):
+		return bool(
+				request.method in SAFE_METHODS and
+				request.user.is_authenticated
+			)
+
 class IsUser(BasePermission):
 
 	def has_object_permission(self, request, view, User):
-
 		return bool(
 				request.user.is_authenticated and
 				request.user.is_superuser or
@@ -37,6 +43,7 @@ class UserPosition(BasePermission):
 				request.user.is_authenticated and
 				request.user.id == obj.paper_trading.user.id
 			)
+
 class UserPositionOption(BasePermission):
 	def has_object_permission(self, request, view, obj):
 		return bool(
@@ -54,6 +61,14 @@ class UserPapertrading(BasePermission):
 				request.user.is_authenticated and
 				request.user.id == obj.user.id
 			)
+
+
+# class is_authenticated(BasePermission):
+# 	def has_permission(self, request, view):
+# 		print("*************************************")
+# 		return bool(
+# 				request.method in SAFE_METHODS
+# 			)
 
 class IsStaffOrReadOnly(BasePermission):
 	def has_permission(self, request, view):

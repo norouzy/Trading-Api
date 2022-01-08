@@ -6,7 +6,7 @@ from extentions.addToWallet import WalletManagment
 from extentions.validateWallet import ValidateWalletCoin
 from extentions.addToWallet import WalletManagment
 from extentions.CoinPrice import PriceChecker
-# from extentions.watchList import WatchList_checker
+from extentions.watchList import WatchList_checker
 User = get_user_model()
 
 
@@ -42,8 +42,16 @@ class UpdatePaperTradingSerializer(serializers.ModelSerializer):
     def validate(self, data):
         key = list(data)
         
-        if 'balance' in key and not 'enter_balance' in key: 
-            if data['balance']>=0.0:
+        if 'enter_balance' in key and not 'balance' in key: 
+            if data['enter_balance']>=0.0:
+                user = self.context['request'].user
+                try :
+                    user_wallet = Wallet.objects.get(paper_trading__user=user,coin="usdt")
+                except:
+                    user_wallet.amount = 0
+                user_paper_trading = Paper_trading.objects.get(user=user)
+                wallet_result=WalletManagment.check("usdt", data['enter_balance'], user_paper_trading)
+                data.update({'enter_balance':data['enter_balance'] + user_paper_trading.enter_balance})
                 return data
             else:
                 raise serializers.ValidationError("enter balance cant be under zero")
@@ -51,7 +59,7 @@ class UpdatePaperTradingSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("some thing went wrong")
     class Meta:
         model = Paper_trading
-        fields = ["id","user", 'balance']
+        fields = ["id","user",'enter_balance']
 
 
 
@@ -87,7 +95,6 @@ class PositionCloseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Position
         fields = ['status',]
-
 
 class PositionAddSerializer(serializers.ModelSerializer):
     paper_trading = serializers.ReadOnlyField(source='paper_trading.id')
@@ -169,24 +176,31 @@ class PositionOptionUpdateSerializer(serializers.ModelSerializer):
         id = view.kwargs['in_position']
         position = Position.objects.get(id=id)
         position_option = Position_option.objects.get(in_position=position)
-        wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
-        print(position_option.amount - new_amount)
-        print(position.coin1)
-
-        position_amount = position.amount / position.entert_price
-        if position_amount>=data['amount'] :
-            wallet_result=WalletManagment.check(position.coin1, position_option.amount - new_amount, wallet.paper_trading)
-            print(wallet_result)
-            if wallet_result == True:
-                return data
-            else:
-                raise serializers.ValidationError(wallet_result)
+        if not position_option.status == "w" and not position_option.trade_type == "w" or not position_option.status == "p" and not position_option.status == "w":
+            raise serializers.ValidationError("this position reached or closed !")
         else:
-            raise serializers.ValidationError("not enough coin")
+            wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
+            print(position_option.amount - new_amount)
+            print(position.coin1)
+
+            position_amount = position.amount / position.entert_price
+            if position_amount>=data['amount'] :
+                wallet_result=WalletManagment.check(position.coin1, position_option.amount - new_amount, wallet.paper_trading)
+                print(wallet_result)
+                if wallet_result == True:
+                    return data
+                else:
+                    raise serializers.ValidationError(wallet_result)
+            else:
+                raise serializers.ValidationError("not enough coin")
             
 
         print(is_valid)
         
+
+    class Meta:
+        model = Position_option
+        fields ="__all__"
 
     class Meta:
         model = Position_option
@@ -202,20 +216,32 @@ class PositionOptionCreateSerializer(serializers.ModelSerializer):
         view = self.context.get('view')
         id = view.kwargs['pk']
         position = Position.objects.get(id=id)
-        wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
         position_amount = position.amount / position.entert_price
-        if position_amount>=data['amount'] :
-            wallet_result=WalletManagment.check(position.coin1, data['amount'] * -1, wallet.paper_trading)
-            if wallet_result == True:
-                if position.order_type == "m":
-                    data.update({'status':'w'})
-                elif position.order_type == "l":
-                    data.update({'status':'p'})
-                return data
+        if position.order_type == "m":
+            wallet = Wallet.objects.get(paper_trading__user=user,coin=position.coin1)
+            if position_amount>=data['amount'] :
+                wallet_result=WalletManagment.check(position.coin1, data['amount'] * -1, wallet.paper_trading)
+                if wallet_result == True:
+                    if not data['stoploss'] and not data['take_profit']:
+                        raise serializers.ValidationError("one of take_profit or stoploss should be fill !")
+                    else:
+                        data.update({'status':'p'})
+                        return data
+                else:
+                    raise serializers.ValidationError(wallet_result)
             else:
-                raise serializers.ValidationError(wallet_result)
-        else:
-            raise serializers.ValidationError("not enough coin in this position")
+                raise serializers.ValidationError("not enough coin in this position")
+        elif position.order_type == "l":
+            if position_amount>=data['amount'] :
+                if position.order_type == "l":
+                    if not data['stoploss'] and not data['take_profit']:
+                        raise serializers.ValidationError("one of take_profit or stoploss should be fill !")
+                    else:
+                        data.update({'status':'p'})
+                        return data
+            else:
+                raise serializers.ValidationError("not enough coin in this position")
+
         
 
     class Meta:

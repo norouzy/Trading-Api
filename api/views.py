@@ -9,6 +9,7 @@ from extentions.addToWallet import WalletManagment
 from pycoingecko import CoinGeckoAPI
 from rest_framework import status
 from rest_framework.parsers import JSONParser
+from rest_framework import status
 
 
 from .serializers import *
@@ -42,26 +43,34 @@ class UserDetail(RetrieveUpdateAPIView):
 
 class PositionList(ListAPIView):
     serializer_class = PositionSerializer
-    permission_classes = (IsUser,)
-
+    permission_classes = (Is_Authenticated,IsUser)
     def get_queryset(self):
         user = self.request.user
-        query = Position.objects.filter(paper_trading__user=user)
+        query = Position.objects.filter(paper_trading__user__id=user.id)
         return query
-
 
 class PositionCloseUpdate(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionCloseSerializer
-    permission_classes = (UserPosition,)
+    permission_classes = (Is_Authenticated,UserPosition,)
 
     def get_queryset(self):
         user = self.request.user
-        query = Position.objects.filter(paper_trading__user=user)
+        query = Position.objects.filter(paper_trading__user__id=user.id)
         return query
+
+    def delete(self, request, *args, **kwargs):
+        user = self.request.user
+        id = self.kwargs["pk"]
+        position = Position.objects.get(id=id, paper_trading__user=user)
+        if not position.status == "w":
+            raise serializers.ValidationError("this position reached or closed ! you cant edit it")
+        else:
+            return self.destroy(request, *args, **kwargs)
 
 
 class PositionCreate(CreateAPIView):
     serializer_class = PositionAddSerializer
+    permission_classes = (Is_Authenticated,)
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -77,7 +86,7 @@ class PositionTotal(ListAPIView):
 
 class PositionOptionCreate(ListCreateAPIView):
     serializer_class = PositionOptionCreateSerializer
-    permission_classes = (UserPositionOption,)
+    permission_classes = (Is_Authenticated,UserPositionOption,)
 
     def get_queryset(self):
         user = self.request.user
@@ -96,9 +105,9 @@ class PositionOptionCreate(ListCreateAPIView):
             raise serializers.ValidationError("You already have a position option")
 
 
-class PositionOptionDetail(RetrieveUpdateDestroyAPIView):
+class PositionOptionUpdate(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionOptionUpdateSerializer
-    permission_classes = (UserPositionOption,)
+    permission_classes = (Is_Authenticated,UserPositionOption,)
     lookup_field = "in_position"
 
     def get_queryset(self):
@@ -106,10 +115,19 @@ class PositionOptionDetail(RetrieveUpdateDestroyAPIView):
         position_id = self.kwargs["in_position"]
         query = Position_option.objects.filter(in_position=position_id, in_position__paper_trading__user=user)
         return query
+    def delete(self, request, *args, **kwargs):
+        user = self.request.user
+        position_id = self.kwargs["in_position"]
+        position_option = Position_option.objects.get(in_position=position_id, in_position__paper_trading__user=user)
+        if not position_option.status == "w" and not position_option.trade_type == "w" or not position_option.status == "p" and not position_option.status == "w":
+            raise serializers.ValidationError("this position reached or closed ! you cant edit it")
+        else:
+            return self.destroy(request, *args, **kwargs)
+
 
 class PositionOptionClose(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionOptionCloseSerializer
-    permission_classes = (UserPositionOption,)
+    permission_classes = (Is_Authenticated,UserPositionOption,)
     lookup_field = "in_position"
 
     def get_queryset(self):
@@ -135,7 +153,7 @@ class PapertradingViewSet(viewsets.ModelViewSet):
 
 class PapertradingListView(ListCreateAPIView):
     serializer_class = CreatePaperTradingSerializer
-    permission_classes = (IsUser,)
+    permission_classes = (Is_Authenticated,IsUser,)
 
     def get_queryset(self):
         user = self.request.user
@@ -153,10 +171,9 @@ class PapertradingListView(ListCreateAPIView):
             raise serializers.ValidationError("You already have a paper account")
 
 
-
 class PapertradingDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = UpdatePaperTradingSerializer
-    permission_classes = (UserPapertrading,)
+    permission_classes = (Is_Authenticated,UserPapertrading,)
 
     def get_queryset(self):
         user = self.request.user
@@ -166,7 +183,7 @@ class PapertradingDetail(RetrieveUpdateDestroyAPIView):
 
 class watchList_List(ListCreateAPIView):
     serializer_class = WatchListSerializer
-    permission_classes = (IsUser,)
+    permission_classes = (Is_Authenticated,IsUser,)
 
     def get_queryset(self):
         user = self.request.user
@@ -183,7 +200,7 @@ class watchList_List(ListCreateAPIView):
 
 class watchList_Details(RetrieveDestroyAPIView):
     serializer_class = WatchListSerializer
-    permission_classes = (UserWatchList,)
+    permission_classes = (Is_Authenticated,UserWatchList,)
 
     def get_queryset(self):
         user = self.request.user
@@ -193,7 +210,7 @@ class watchList_Details(RetrieveDestroyAPIView):
 
 class walletList(ListAPIView):
     serializer_class = WalletSerializer
-    permission_classes = (IsUser,)
+    permission_classes = (Is_Authenticated,IsUser,)
 
     def get_queryset(self):
         user = self.request.user
