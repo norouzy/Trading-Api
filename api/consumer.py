@@ -15,15 +15,25 @@ User = get_user_model()
 class TradeConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
+
+        # GETTING DATA FROM URL
         self.user = self.scope['user']
         parsed_link = urlparse(str(self.scope['query_string'])[2:-1])
         captured_value = parse_qs(parsed_link.path)
+        print(captured_value)
+
+        # try:
+        #     self.coin1 = captured_value["coin"][0]
+        #     self.coin2 = captured_value["to"][0]
+        # except:
+        #     self.coin1 = 'btc'
+        #     self.coin2 = 'usdt'
 
         # GET LAST POSITIONS COUNT FROM URL
-        try:
-            self.p_count = int(captured_value["p"][0])
-        except:
-            self.p_count = 10
+        # try:
+        #     self.p_count = int(captured_value["p"][0])
+        # except:
+        #     self.p_count = 10
 
         self.group_name='tableData'
         await self.channel_layer.group_add(
@@ -46,9 +56,17 @@ class TradeConsumer(AsyncWebsocketConsumer):
         )
 
     async def main(self, event):
+
+        # GET DATA FROM VAL
         val = json.loads(event['value'])
         coin1 = val['coin1']
         coin2 = val['coin2']
+        try:
+            last_positions_count = val['lpc']
+        except:
+            last_positions_count = 10
+
+        # SENDING DATA TO SOCKET
         while True:
             wallet_coin = []
             watchlist_coin = {"coin1": [], "coin2": []}
@@ -101,7 +119,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
             data[coin1 + "/" + coin2] = self.get_price(coin1, coin2)[coin2.upper()]
 
             # GET LAST POSITIONS
-            last_positions = await self.get_last_positions(self.p_count)
+            last_positions = await self.get_last_positions(last_positions_count, coin1, coin2)
 
             # SET LAST POSITIONS
             for position in last_positions:
@@ -124,8 +142,8 @@ class TradeConsumer(AsyncWebsocketConsumer):
         return results
 
     @database_sync_to_async
-    def get_last_positions(self, count=10):
-        results = list(Position.objects.all().order_by('-oreder_set_date')[:count])
+    def get_last_positions(self, count, coin1, coin2):
+        results = list(Position.objects.filter(coin1=coin1, coin2=coin2).order_by('-oreder_set_date')[:count])
         return results
 
     @database_sync_to_async
