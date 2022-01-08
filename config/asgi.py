@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/
 import os
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-from django.conf.urls import url
 from django.core.asgi import get_asgi_application
 from .routing import ws_pattern
 from django_channels_jwt_auth_middleware.auth import JWTAuthMiddlewareStack
