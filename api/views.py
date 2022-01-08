@@ -231,6 +231,10 @@ def socket_test(request):
     return render(request, 'index.html', context)
 
 
+def homeSocketView(request):
+    return render(request, 'home.html')
+
+
 class coinListView(ListCreateAPIView):
     serializer_class = CoinSerializer
     permission_classes = (IsSuperUserOrReadOnly,)
