@@ -379,12 +379,16 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         val24h = res['VOLUME24HOUR']
         coinImg = "https://www.cryptocompare.com/"+coin['CoinInfo']['ImageUrl']
         marketCap = res['MKTCAP']
+        changePctIn24h = coin['coinInfo']['CHANGEPCT24HOUR']
+
         set_data = {
             'coin': name,
             'price': price,
             'val24h': val24h,
             'coinImg': coinImg,
-            'marketCap': marketCap
+            'marketCap': marketCap,
+            'changePctIn24h': changePctIn24h,
+
         }
         data['top_coins'].append(set_data)
         return data
