@@ -8,6 +8,7 @@ from extentions.addToWallet import WalletManagment
 from pycoingecko import CoinGeckoAPI
 from rest_framework import status
 from rest_framework.parsers import JSONParser
+from rest_framework import status
 
 
 from .serializers import *
@@ -41,21 +42,19 @@ class UserDetail(RetrieveUpdateAPIView):
 
 class PositionList(ListAPIView):
     serializer_class = PositionSerializer
-    permission_classes = (IsUser,)
-
+    permission_classes = (Is_Authenticated,IsUser)
     def get_queryset(self):
         user = self.request.user
-        query = Position.objects.filter(paper_trading__user=user)
+        query = Position.objects.filter(paper_trading__user__id=user.id)
         return query
-
 
 class PositionCloseUpdate(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionCloseSerializer
-    permission_classes = (UserPosition,)
+    permission_classes = (Is_Authenticated,UserPosition,)
 
     def get_queryset(self):
         user = self.request.user
-        query = Position.objects.filter(paper_trading__user=user)
+        query = Position.objects.filter(paper_trading__user__id=user.id)
         return query
 
     def delete(self, request, *args, **kwargs):
@@ -70,6 +69,7 @@ class PositionCloseUpdate(RetrieveUpdateDestroyAPIView):
 
 class PositionCreate(CreateAPIView):
     serializer_class = PositionAddSerializer
+    permission_classes = (Is_Authenticated,)
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -85,7 +85,7 @@ class PositionTotal(ListAPIView):
 
 class PositionOptionCreate(ListCreateAPIView):
     serializer_class = PositionOptionCreateSerializer
-    permission_classes = (UserPositionOption,)
+    permission_classes = (Is_Authenticated,UserPositionOption,)
 
     def get_queryset(self):
         user = self.request.user
@@ -106,7 +106,7 @@ class PositionOptionCreate(ListCreateAPIView):
 
 class PositionOptionUpdate(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionOptionUpdateSerializer
-    permission_classes = (UserPositionOption,)
+    permission_classes = (Is_Authenticated,UserPositionOption,)
     lookup_field = "in_position"
 
     def get_queryset(self):
@@ -126,7 +126,7 @@ class PositionOptionUpdate(RetrieveUpdateDestroyAPIView):
 
 class PositionOptionClose(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionOptionCloseSerializer
-    permission_classes = (UserPositionOption,)
+    permission_classes = (Is_Authenticated,UserPositionOption,)
     lookup_field = "in_position"
 
     def get_queryset(self):
@@ -152,7 +152,7 @@ class PapertradingViewSet(viewsets.ModelViewSet):
 
 class PapertradingListView(ListCreateAPIView):
     serializer_class = CreatePaperTradingSerializer
-    permission_classes = (IsUser,)
+    permission_classes = (Is_Authenticated,IsUser,)
 
     def get_queryset(self):
         user = self.request.user
@@ -172,7 +172,7 @@ class PapertradingListView(ListCreateAPIView):
 
 class PapertradingDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = UpdatePaperTradingSerializer
-    permission_classes = (UserPapertrading,)
+    permission_classes = (Is_Authenticated,UserPapertrading,)
 
     def get_queryset(self):
         user = self.request.user
@@ -182,7 +182,7 @@ class PapertradingDetail(RetrieveUpdateDestroyAPIView):
 
 class watchList_List(ListCreateAPIView):
     serializer_class = WatchListSerializer
-    permission_classes = (IsUser,)
+    permission_classes = (Is_Authenticated,IsUser,)
 
     def get_queryset(self):
         user = self.request.user
@@ -199,7 +199,7 @@ class watchList_List(ListCreateAPIView):
 
 class watchList_Details(RetrieveDestroyAPIView):
     serializer_class = WatchListSerializer
-    permission_classes = (UserWatchList,)
+    permission_classes = (Is_Authenticated,UserWatchList,)
 
     def get_queryset(self):
         user = self.request.user
@@ -209,7 +209,7 @@ class watchList_Details(RetrieveDestroyAPIView):
 
 class walletList(ListAPIView):
     serializer_class = WalletSerializer
-    permission_classes = (IsUser,)
+    permission_classes = (Is_Authenticated,IsUser,)
 
     def get_queryset(self):
         user = self.request.user
