@@ -21,12 +21,9 @@ django_asgi_app = get_asgi_application()
 
 application = ProtocolTypeRouter({
     # Django's ASGI application to handle traditional HTTP requests
-    "http": django_asgi_app,
+    "http": get_asgi_application(),
+    "https": get_asgi_application(),
 
     # WebSocket chat handler
-    "websocket": AuthMiddlewareStack(
-            URLRouter(
-                ws_pattern
-            )
-    ),
+    "websocket": JWTAuthMiddlewareStack(URLRouter(ws_pattern))
 })
