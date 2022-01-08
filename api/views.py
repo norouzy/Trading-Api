@@ -1,3 +1,4 @@
+import requests
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.db import IntegrityError
@@ -247,9 +248,16 @@ class coinListView(ListCreateAPIView):
         lastCoins = [coin[0] for coin in lastCoins]
 
         # GET TOTAL CRYPTO COINS
-        cg = CoinGeckoAPI()
+        # cg = CoinGeckoAPI()
+        # get_coins = [i['symbol'] for i in cg.get_coins_list()]
         data = []
-        get_coins = [i['symbol'] for i in cg.get_coins_list()]
+        get_coins = []
+        url = 'https://min-api.cryptocompare.com/data/all/coinlist'
+        res = requests.get(url)
+        res = res.json()
+
+        for coin in res['Data']:
+            get_coins.append(str(coin))
 
         # REMOVE DUPLICATED AND EXISTED COINS
         for elem in get_coins:
