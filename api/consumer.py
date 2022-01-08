@@ -18,9 +18,9 @@ class TradeConsumer(AsyncWebsocketConsumer):
 
         # GETTING DATA FROM URL
         self.user = self.scope['user']
-        parsed_link = urlparse(str(self.scope['query_string'])[2:-1])
-        captured_value = parse_qs(parsed_link.path)
-        print(captured_value)
+        # parsed_link = urlparse(str(self.scope['query_string'])[2:-1])
+        # captured_value = parse_qs(parsed_link.path)
+        # print(captured_value)
 
         # try:
         #     self.coin1 = captured_value["coin"][0]
@@ -276,3 +276,32 @@ class TradeConsumer(AsyncWebsocketConsumer):
         return data
 
 
+class HomePageConsumer(AsyncWebsocketConsumer):
+
+    async def connect(self):
+        self.group_name = 'homeData'
+        await self.channel_layer.group_add(
+            self.group_name,
+            self.channel_name
+        )
+
+        await self.accept()
+
+    async def disconnect(self, code):
+        pass
+
+    async def receive(self, text_data=None, bytes_data=None):
+        await self.channel_layer.group_send(
+            self.group_name,
+            {
+                'type': 'main',
+                'value': text_data,
+            }
+        )
+
+    async def main(self, event):
+        val = json.loads(event['value'])
+        while True:
+            data = {}
+            await self.send(json.dumps(data))
+            await sleep(1)
