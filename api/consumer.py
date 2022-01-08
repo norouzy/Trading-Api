@@ -301,7 +301,47 @@ class HomePageConsumer(AsyncWebsocketConsumer):
 
     async def main(self, event):
         val = json.loads(event['value'])
+
+        # LAST POSITIONS COUNT
+        try:
+            last_positions_count = val['lpc']
+        except:
+            last_positions_count = 10
+
+
         while True:
-            data = {}
+            data = {
+                "last_positions": [],
+            }
+
+            # GET LAST POSITIONS
+            last_positions = await self.get_last_positions(last_positions_count)
+
+            # SET LAST POSITIONS
+            for position in last_positions:
+                data = self.set_last_positions(data, position)
+
             await self.send(json.dumps(data))
             await sleep(1)
+
+    @database_sync_to_async
+    def get_last_positions(self, count):
+        results = list(Position.objects.all().order_by('-oreder_set_date')[:count])
+        return results
+
+    def set_last_positions(self, data, position):
+        set_data = {
+            "id": position.id,
+            "trade_type": position.trade_type,
+            "order_type": position.order_type,
+            "coin1": position.coin1,
+            "coin2": position.coin2,
+            "entert_price": position.entert_price,
+            "amount": position.amount,
+            "status": position.status,
+            "oreder_set_date": TradeConsumer.time_format(data, position.oreder_set_date) if position.oreder_set_date else "",
+            "oreder_reach_date": TradeConsumer.time_format(data, position.oreder_reach_date) if position.oreder_reach_date else "",
+        }
+        data["last_positions"].append(set_data)
+
+        return data
