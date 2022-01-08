@@ -37,7 +37,7 @@
 // });
 // or with import syntax
     // import { io } from "socket.io-client";
-    let socket = new WebSocket('ws://localhost:8000/ws/tableData/?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQyNTI4MzA5LCJqdGkiOiJiNDY3NDNlYjQwOTE0OTM0YTAxZTFiMTM1MTI3ODYyOCIsInVzZXJfaWQiOjh9.zNb11v4aUW49RkHyReNPgiLMmog5XHpSpvcBSj8DsA4');
+    let socket = new WebSocket('ws://'+ window.location.host +'/ws/user_info/?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQyNTI4MzA5LCJqdGkiOiJiNDY3NDNlYjQwOTE0OTM0YTAxZTFiMTM1MTI3ODYyOCIsInVzZXJfaWQiOjh9.zNb11v4aUW49RkHyReNPgiLMmog5XHpSpvcBSj8DsA4');
     socket.onopen = function(e){
         alert('Connection established');
     };

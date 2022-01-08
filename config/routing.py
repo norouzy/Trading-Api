@@ -6,7 +6,7 @@ from api import consumer
 from django_channels_jwt_auth_middleware.auth import JWTAuthMiddlewareStack
 
 ws_pattern= [
-    path('ws/tableData/',consumer.TradeConsumer.as_asgi()),
+    path('ws/user_info/',consumer.TradeConsumer.as_asgi()),
 ]
 
 application= ProtocolTypeRouter(
