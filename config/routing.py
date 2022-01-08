@@ -10,8 +10,8 @@ ws_pattern= [
     path('ws/homeData/', consumer.HomePageConsumer.as_asgi()),
 ]
 
-application = ProtocolTypeRouter(
-    {
-        'websocket': JWTAuthMiddlewareStack(URLRouter(ws_pattern))
-    }
-)
+# application = ProtocolTypeRouter(
+#     {
+#         'websocket': JWTAuthMiddlewareStack(URLRouter(ws_pattern))
+#     }
+# )
