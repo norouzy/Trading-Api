@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # Cross Headers
     'corsheaders',
 
+    'django.contrib.contenttypes.models.ContentType',
 ]
 
 MIDDLEWARE = [
