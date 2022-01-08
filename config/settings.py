@@ -88,7 +88,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-ASGI_APPLICATION = "config.routing.application"
+ASGI_APPLICATION = 'config.asgi.application'
+# ASGI_APPLICATION = "config.routing.application"
 
 CHANNEL_LAYERS = {
     'default': {
@@ -193,18 +194,5 @@ REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'access'
 JWT_AUTH_REFRESH_COOKIE = 'refresh'
 
-# JWT_AUTH = {
-#
-#     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=10),
-#     'JWT_AUDIENCE': None,
-#     'JWT_ISSUER': None,
-#
-#     'JWT_ALLOW_REFRESH': False,
-#     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=30),
-#
-#     'JWT_AUTH_HEADER_PREFIX': 'JWT',
-#     'JWT_AUTH_COOKIE': None,
-#
-# }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
