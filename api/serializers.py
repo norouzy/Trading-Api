@@ -6,7 +6,7 @@ from extentions.addToWallet import WalletManagment
 from extentions.validateWallet import ValidateWalletCoin
 from extentions.addToWallet import WalletManagment
 from extentions.CoinPrice import PriceChecker
-# from extentions.watchList import WatchList_checker
+from extentions.watchList import WatchList_checker
 User = get_user_model()
 
 
