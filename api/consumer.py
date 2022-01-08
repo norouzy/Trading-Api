@@ -6,14 +6,22 @@ from api.models import Watch_list,Wallet, Position,Position_option, Paper_tradin
 from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
+
+from urllib.parse import urlparse, parse_qs
+
 User = get_user_model()
+
+
 class TradeConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.user = self.scope['user']
+        parsed_link = urlparse(str(self.scope['query_string'])[2:-1])
+        captured_value = parse_qs(parsed_link.path)
 
+        # GET LAST POSITIONS COUNT FROM URL
         try:
-            self.p_count = int(str(self.scope['query_string']).split('&p=')[1].split('\'')[0])
+            self.p_count = int(captured_value["p"][0])
         except:
             self.p_count = 10
 
