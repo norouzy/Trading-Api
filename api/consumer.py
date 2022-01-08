@@ -379,7 +379,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         val24h = res['VOLUME24HOUR']
         coinImg = "https://www.cryptocompare.com/"+coin['CoinInfo']['ImageUrl']
         marketCap = res['MKTCAP']
-        changePctIn24h = coin['coinInfo']['CHANGEPCT24HOUR']
+        changePctIn24h = coin['DISPLAY']['USD']['CHANGEPCT24HOUR']
         priceDiagram = f"https://images.cryptocompare.com/sparkchart/{name}/USD/latest.png"
 
         set_data = {
