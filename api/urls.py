@@ -26,6 +26,7 @@ urlpatterns = [
 	path('paper-trading/<int:pk>/', PapertradingDetail.as_view()),
 	path('test/', test, name="test"),
 	path('sokect_test/', socket_test,name="socket_test"),
+	path('home/', homeSocketView, name='socket_home'),
 
 	path('coinlist/', coinListView.as_view()),
 
