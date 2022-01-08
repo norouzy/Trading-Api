@@ -46,7 +46,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         pass
 
-    async def receive(self, text_data):
+    async def receive(self, text_data=None, bytes_data=None):
         await self.channel_layer.group_send(
             self.group_name,
             {
