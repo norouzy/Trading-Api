@@ -1,0 +1,25 @@
+<html>
+<script>
+    let socket = new WebSocket("ws://localhost:8000/ws/homeData/");
+    socket.onopen = function (e) {
+        alert('Connection established');
+    };
+    socket.onopen = function () {
+        socket.send(JSON.stringify({'coin1': 'btc', 'coin2': "usdt", 'lpc': 2}));
+    }
+
+
+    socket.onmessage = function (e) {
+        console.log(e['data']);
+    };
+
+    socket.onclose = function (e) {
+        // alert('Connection closed');
+    };
+</script>
+
+<body>
+<h1>Home</h1>
+</body>
+
+</html>
