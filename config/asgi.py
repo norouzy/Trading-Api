@@ -15,6 +15,8 @@ from .routing import ws_pattern
 from django_channels_jwt_auth_middleware.auth import JWTAuthMiddlewareStack
 
 
+
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django_asgi_app = get_asgi_application()
 
@@ -31,3 +33,5 @@ application = ProtocolTypeRouter({
     #         )
     # ),
 })
+
+
