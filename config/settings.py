@@ -10,9 +10,12 @@ import datetime
 import os
 from pathlib import Path
 
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", __file__)
-# import django
-# django.setup()
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
+
+import django
+django.setup()
+
+from django.core.management import call_command
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
