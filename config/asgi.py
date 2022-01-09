@@ -24,10 +24,10 @@ application = ProtocolTypeRouter({
     "https": get_asgi_application(),
 
     # WebSocket chat handler
-    # "websocket": JWTAuthMiddlewareStack(URLRouter(ws_pattern))
-     "websocket": AuthMiddlewareStack(
-            URLRouter(
-                ws_pattern
-            )
-    ),
+    "websocket": JWTAuthMiddlewareStack(URLRouter(ws_pattern))
+    #  "websocket": AuthMiddlewareStack(
+    #         URLRouter(
+    #             ws_pattern
+    #         )
+    # ),
 })
