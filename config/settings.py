@@ -10,12 +10,12 @@ import datetime
 import os
 from pathlib import Path
 
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
-#
-# import django
-# django.setup()
-#
-# from django.core.management import call_command
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+
+import django
+django.setup()
+
+from django.core.management import call_command
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-o_63(=jef-u98!)t**=wm)68$g!6_^-xy29l)=v$53rkrd37q7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
