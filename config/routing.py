@@ -25,9 +25,9 @@ from django_channels_jwt_auth_middleware.auth import JWTAuthMiddlewareStack
 ws_pattern= [
     path('ws/user_info/',consumer.TradeConsumer.as_asgi()),
 ]
-
-application= ProtocolTypeRouter(
-    {
-        'websocket':JWTAuthMiddlewareStack(URLRouter(ws_pattern))
-    }
-)
+#
+# application= ProtocolTypeRouter(
+#     {
+#         'websocket':JWTAuthMiddlewareStack(URLRouter(ws_pattern))
+#     }
+# )
