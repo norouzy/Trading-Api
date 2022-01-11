@@ -33,6 +33,7 @@ psycopg2
 pyasn1
 pyasn1-modules
 pycoingecko
+wr
 pycparser
 PyJWT
 pyOpenSSL
