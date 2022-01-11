@@ -1,3 +1,6 @@
+aioredis
+asgiref
+async-timeout
 attrs
 autobahn
 Automat
@@ -29,11 +32,9 @@ incremental
 Markdown
 msgpack
 oauthlib
-psycopg2
+psycopg2-binary
 pyasn1
 pyasn1-modules
-pycoingecko
-wr
 pycparser
 PyJWT
 pyOpenSSL
