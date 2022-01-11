@@ -29,7 +29,7 @@ incremental
 Markdown
 msgpack
 oauthlib
-psycopg2-binary
+psycopg2
 pyasn1
 pyasn1-modules
 pycoingecko
