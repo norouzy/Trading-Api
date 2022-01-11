@@ -44,23 +44,31 @@ For more information on this file, see
 https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
 """
 
+# import os
+# from channels.routing import ProtocolTypeRouter, URLRouter
+# # from django_channels_jwt_auth_middleware.auth import JWTAuthMiddlewareStack
+# from config import routing
+# import django
+# from django.core.asgi import get_asgi_application
+
+
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+# django_asgi_app = get_asgi_application()
+# application = ProtocolTypeRouter({
+#     "http": get_asgi_application(),
+#     "https": get_asgi_application(),
+#      "websocket": JWTAuthMiddlewareStack(
+#          URLRouter(routing.ws_pattern)
+#      ),
+# })
+
 import os
-from channels.routing import ProtocolTypeRouter, URLRouter
-# from django_channels_jwt_auth_middleware.auth import JWTAuthMiddlewareStack
-from config import routing
-import django
+
 from django.core.asgi import get_asgi_application
 
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-django_asgi_app = get_asgi_application()
-application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
-    "https": get_asgi_application(),
-     "websocket": AuthMiddlewareStack(
-         URLRouter(routing.ws_pattern)
-     ),
-})
+
+application = get_asgi_application()
 
 
 
