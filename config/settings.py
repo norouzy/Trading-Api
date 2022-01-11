@@ -162,7 +162,7 @@ SIMPLE_JWT = {
      'REFRESH_TOKEN_LIFETIME': timedelta(weeks=5),
 
 }
-
+django_asgi_app = get_asgi_application()
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
