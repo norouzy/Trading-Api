@@ -161,35 +161,13 @@ ASGI_APPLICATION = 'config.asgi.application'
 # }
 
 ########################################################################
-# import ssl
-#
-# ssl_context = ssl.SSLContext()
-# ssl_context.check_hostname = False
-#
-# heroku_redis_ssl_host = {
-#     'address': 'rediss://:p55213883d08c65b47a0167580163fa148ac5fd73f09b32d14e22af68c4463b67@ec2-35-172-144-41.compute-1.amazonaws.com:13760',  # The 'rediss' schema denotes a SSL connection.
-#     'ssl': ssl_context
-# }
-#
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             'hosts': (heroku_redis_ssl_host,)
-#         }
-#     },
-# }
-
-
-########################################################################
-
 import ssl
 
 ssl_context = ssl.SSLContext()
 ssl_context.check_hostname = False
 
 heroku_redis_ssl_host = {
-    'address': 'rediss://:SoAWx6SNt8fPeSBE5P0oVLNNdVqm2CVO@redis-16775.c267.us-east-1-4.ec2.cloud.redislabs.com:16775',  # The 'rediss' schema denotes a SSL connection.
+    'address': 'rediss://:p55213883d08c65b47a0167580163fa148ac5fd73f09b32d14e22af68c4463b67@ec2-35-172-144-41.compute-1.amazonaws.com:13760',  # The 'rediss' schema denotes a SSL connection.
     'ssl': ssl_context
 }
 
@@ -201,6 +179,28 @@ CHANNEL_LAYERS = {
         }
     },
 }
+
+
+########################################################################
+
+# import ssl
+
+# ssl_context = ssl.SSLContext()
+# ssl_context.check_hostname = False
+
+# heroku_redis_ssl_host = {
+#     'address': 'rediss://:SoAWx6SNt8fPeSBE5P0oVLNNdVqm2CVO@redis-16775.c267.us-east-1-4.ec2.cloud.redislabs.com:16775',  # The 'rediss' schema denotes a SSL connection.
+#     'ssl': ssl_context
+# }
+
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': (heroku_redis_ssl_host,)
+#         }
+#     },
+# }
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
