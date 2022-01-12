@@ -98,14 +98,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
 # ASGI_APPLICATION = "config.routing.application"
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
 # CHANNEL_LAYERS = {
 #     "default": {
 #         "BACKEND": "asgi_redis.RedisChannelLayer",
@@ -115,6 +115,26 @@ CHANNEL_LAYERS = {
 #         "ROUTING": "chat.routing.channel_routing",
 #     },
 # }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             # "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+#             "hosts": [('REDIS_URL', 'redis-16419.c92.us-east-1-3.ec2.cloud.redislabs.com:16419')],
+#         },
+#     },
+# }
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
