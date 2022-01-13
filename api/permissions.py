@@ -13,7 +13,6 @@ class IsSuperUser(BasePermission):
 class Is_Authenticated(BasePermission):
 	def has_permission(self, request, view):
 		return bool(
-				request.method in SAFE_METHODS and
 				request.user.is_authenticated
 			)
 
