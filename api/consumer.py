@@ -391,26 +391,29 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         return data
 
     def set_top_coins(self, data, coin):
-        res = coin['RAW']['USD']
-        name = res['FROMSYMBOL']
-        price = res['PRICE']
-        val24h = res['VOLUME24HOUR']
-        coinImg = "https://www.cryptocompare.com/"+coin['CoinInfo']['ImageUrl']
-        marketCap = res['MKTCAP']
-        changePctIn24h = coin['DISPLAY']['USD']['CHANGEPCT24HOUR']
-        priceDiagram = f"https://images.cryptocompare.com/sparkchart/{name}/USD/latest.png"
+        try:
+            res = coin['RAW']['USD']
+            name = res['FROMSYMBOL']
+            price = res['PRICE']
+            val24h = res['VOLUME24HOUR']
+            coinImg = "https://www.cryptocompare.com/"+coin['CoinInfo']['ImageUrl']
+            marketCap = res['MKTCAP']
+            changePctIn24h = coin['DISPLAY']['USD']['CHANGEPCT24HOUR']
+            priceDiagram = f"https://images.cryptocompare.com/sparkchart/{name}/USD/latest.png"
 
-        set_data = {
-            'coin': name,
-            'price': price,
-            'val24h': val24h,
-            'coinImg': coinImg,
-            'marketCap': marketCap,
-            'changePctIn24h': changePctIn24h,
-            'priceDiagram': priceDiagram
+            set_data = {
+                'coin': name,
+                'price': price,
+                'val24h': val24h,
+                'coinImg': coinImg,
+                'marketCap': marketCap,
+                'changePctIn24h': changePctIn24h,
+                'priceDiagram': priceDiagram
 
-        }
-        data['top_coins'].append(set_data)
+            }
+            data['top_coins'].append(set_data)
+        except:
+            pass
         return data
 
     def watchlist(self, data, watchlists, watchlist_coin):
