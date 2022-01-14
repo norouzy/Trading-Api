@@ -62,6 +62,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -98,69 +99,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
 # ASGI_APPLICATION = "config.routing.application"
 
-#############################################################################
 
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             "hosts": [('127.0.0.1', 6379)],
-#         },
-#     },
-# }
-
-#############################################################################
-
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "asgi_redis.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-#         },
-#         "ROUTING": "chat.routing.channel_routing",
-#     },
-# }
-
-#############################################################################
-
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("redis://trading:SoAWx6SNt8fPeSBE5P0oVLNNdVqm2CVO@SoAWx6SNt8fPeSBE5P0oVLNNdVqm2CVO:16775", 6379)],
-#         },
-#         # "redis://trading:SoAWx6SNt8fPeSBE5P0oVLNNdVqm2CVO@SoAWx6SNt8fPeSBE5P0oVLNNdVqm2CVO:16775"
-#         # "redis://user:pass@host:port"
-#     },
-# }
-
-######################################################################
-
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-# #             "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-#             "hosts": [('REDIS_URL', 'http://redis-19898.c9.us-east-1-2.ec2.cloud.redislabs.com')],
-#             "port":6379,
-#             "password":'AsFWv62Mu8T8H7RHSVtAjUbNoBaEsVA4',
-#         },
-#     },
-# }
-
-#######################################################################
-
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             # "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-#             "hosts": [('REDIS_URL', 'redis-16419.c92.us-east-1-3.ec2.cloud.redislabs.com:16419')],
-#         },
-#     },
-# }
-
-########################################################################
 import ssl
 
 ssl_context = ssl.SSLContext()
@@ -179,28 +118,7 @@ CHANNEL_LAYERS = {
         }
     },
 }
-
-
-########################################################################
-
-# import ssl
-
-# ssl_context = ssl.SSLContext()
-# ssl_context.check_hostname = False
-
-# heroku_redis_ssl_host = {
-#     'address': 'rediss://:SoAWx6SNt8fPeSBE5P0oVLNNdVqm2CVO@redis-16775.c267.us-east-1-4.ec2.cloud.redislabs.com:16775',  # The 'rediss' schema denotes a SSL connection.
-#     'ssl': ssl_context
-# }
-
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             'hosts': (heroku_redis_ssl_host,)
-#         }
-#     },
-# }
+#################################################################################################################
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -272,6 +190,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'templates')
 
 # location where you will store your static files
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'api/templates')]
+
+# White Noise Storage
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
