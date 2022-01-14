@@ -106,7 +106,7 @@ ssl_context = ssl.SSLContext()
 ssl_context.check_hostname = False
 
 heroku_redis_ssl_host = {
-    'address': 'rediss://:p55213883d08c65b47a0167580163fa148ac5fd73f09b32d14e22af68c4463b67@http://ec2-3-210-19-106.compute-1.amazonaws.com:18010',  # The 'rediss' schema denotes a SSL connection.
+    'address': 'redis://:p55213883d08c65b47a0167580163fa148ac5fd73f09b32d14e22af68c4463b67@ec2-3-210-19-106.compute-1.amazonaws.com:18010',  # The 'rediss' schema denotes a SSL connection.
     'ssl': ssl_context
 }
 
