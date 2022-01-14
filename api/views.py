@@ -274,7 +274,8 @@ class coinListView(ListCreateAPIView):
         res = res.json()
 
         for coin in res['Data']:
-            get_coins.append(str(coin))
+            coinName = str(coin).lower()
+            get_coins.append(coinName)
 
         # REMOVE DUPLICATED AND EXISTED COINS
         for elem in get_coins:

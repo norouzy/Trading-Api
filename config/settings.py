@@ -298,3 +298,4 @@ JWT_AUTH_REFRESH_COOKIE = 'refresh'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240 # higher than the count of fields
