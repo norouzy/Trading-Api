@@ -51,5 +51,6 @@ txaio
 typing-extensions
 urllib3
 websocket-client
+whitenoise
 zipp
 zope.interface
