@@ -81,7 +81,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
                     },
                     "position": [],
                     "last_positions": [],
-                    coin1 + "/" + coin2: 0,
+                    "coinInfo": [],
                 }
 
                 checked_paper = await self.check_paper_trading()
@@ -112,11 +112,11 @@ class TradeConsumer(AsyncWebsocketConsumer):
             else:
                 data = {
                     "last_positions": [],
-                    coin1 + "/" + coin2: 0,
+                    "coinInfo": [],
                 }
 
-            # GET COIN PRICE
-            data[coin1 + "/" + coin2] = self.get_price(coin1, coin2)[coin2.upper()]
+            # GET COINS INFO
+            data["coinInfo"] = self.get_coin_info(coin1, coin2)
 
             # GET LAST POSITIONS
             last_positions = await self.get_last_positions(last_positions_count, coin1, coin2)
@@ -178,11 +178,35 @@ class TradeConsumer(AsyncWebsocketConsumer):
         response = response.json()
         return response
 
-    def get_price(self, coin1, coin2):
-        url = f"https://min-api.cryptocompare.com/data/price?fsym={coin1}&tsyms={coin2}"
+    def get_coin_info(self, coin1, coin2):
+        # url = f"https://min-api.cryptocompare.com/data/price?fsym={coin1}&tsyms={coin2}"
+        # response = requests.get(url)
+        # response = response.json()
+        # return response
+        coin1 = coin1.upper()
+        coin2 = coin2.upper()
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin1}&tsyms={coin2}"
         response = requests.get(url)
         response = response.json()
-        return response
+
+        res = response["RAW"][coin1][coin2]
+        FromSymbol = res['FROMSYMBOL']
+        ToSymbol = res['TOSYMBOL']
+        price = res['PRICE']
+        High24H = res['HIGH24HOUR']
+        Low24H = res['LOW24HOUR']
+        TotalVolume24H = res['TOTALVOLUME24H']
+
+        set_data = {
+            'FromSymbol': FromSymbol,
+            'ToSymbol': ToSymbol,
+            'price': price,
+            'High24H': High24H,
+            'Low24H': Low24H,
+            'TotalVolume24H': TotalVolume24H,
+        }
+        return set_data
+
 
     def balance(self, coins):
         key = list(coins)
