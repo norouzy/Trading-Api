@@ -395,6 +395,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
             res = coin['RAW']['USD']
             name = res['FROMSYMBOL']
             fullName = coin['CoinInfo']['FullName']
+            coinId = coin['CoinInfo']['Id']
             price = res['PRICE']
             val24h = res['VOLUME24HOUR']
             coinImg = "https://www.cryptocompare.com/"+coin['CoinInfo']['ImageUrl']
@@ -405,6 +406,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
             set_data = {
                 'coin': name,
                 'fullName': fullName,
+                'coinId': coinId,
                 'price': price,
                 'val24h': val24h,
                 'coinImg': coinImg,
