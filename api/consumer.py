@@ -126,7 +126,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
                 data = self.set_last_positions(data, position)
 
             await self.send(json.dumps(data))
-            await sleep(1)
+            await sleep(5)
 
     @database_sync_to_async
     def get_watchlist(self):
@@ -204,9 +204,10 @@ class TradeConsumer(AsyncWebsocketConsumer):
             'High24H': High24H,
             'Low24H': Low24H,
             'TotalVolume24H': TotalVolume24H,
+            'coin1_image': self.get_coin_image(FromSymbol),
+            'coin2_image': self.get_coin_image(ToSymbol)
         }
         return set_data
-
 
     def balance(self, coins):
         key = list(coins)
@@ -223,7 +224,8 @@ class TradeConsumer(AsyncWebsocketConsumer):
                 "coin": wallet.coin,
                 "amount": wallet.amount,
                 "price": wallet_coin_price["RAW"][(wallet.coin).upper()]['USDT']["PRICE"],
-                "1HChange": wallet_coin_price["RAW"][(wallet.coin).upper()]['USDT']["CHANGEPCTHOUR"]
+                "1HChange": wallet_coin_price["RAW"][(wallet.coin).upper()]['USDT']["CHANGEPCTHOUR"],
+                "image": self.get_coin_image(wallet.coin)
             }
             tot_balance = tot_balance + wallet_coin_price["RAW"][(wallet.coin).upper()]['USDT']["PRICE"] * wallet.amount
             data['wallet']["coin"].append(set_data)
@@ -238,7 +240,9 @@ class TradeConsumer(AsyncWebsocketConsumer):
                 "coin1": watchlist.coin1,
                 "coin2": watchlist.coin2,
                 "price": watchlist_coin_price["RAW"][(watchlist.coin1).upper()][(watchlist.coin2).upper()]["PRICE"],
-                "1HChange": watchlist_coin_price["RAW"][(watchlist.coin1).upper()][(watchlist.coin2).upper()]["CHANGEPCTHOUR"]
+                "1HChange": watchlist_coin_price["RAW"][(watchlist.coin1).upper()][(watchlist.coin2).upper()]["CHANGEPCTHOUR"],
+                "coin1_image": self.get_coin_image(watchlist.coin1),
+                "coin2_image": self.get_coin_image(watchlist.coin2)
             } 
             data['watchlist'].append(set_data)
         return data
@@ -298,6 +302,19 @@ class TradeConsumer(AsyncWebsocketConsumer):
         data["last_positions"].append(set_data)
 
         return data
+
+    def get_coin_image(self, inCoin):
+        try:
+            coin = inCoin.upper()
+            url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin}&tsyms=USDT"
+            response = requests.get(url)
+            response = response.json()
+            coinImg = response['DISPLAY'][coin]['USDT']['IMAGEURL']
+            coinImg = "https://www.cryptocompare.com" + coinImg
+        except:
+            coinImg = "Not Found"
+
+        return coinImg
 
 
 class HomePageConsumer(AsyncWebsocketConsumer):
@@ -380,7 +397,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
                 data = self.set_top_coins(data, coin)
 
             await self.send(json.dumps(data))
-            await sleep(1)
+            await sleep(5)
 
     @database_sync_to_async
     def get_last_positions(self, count):
