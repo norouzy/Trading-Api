@@ -45,10 +45,10 @@ class UpdatePaperTradingSerializer(serializers.ModelSerializer):
         if 'enter_balance' in key and not 'balance' in key: 
             if data['enter_balance']>=0.0:
                 user = self.context['request'].user
-                try :
-                    user_wallet = Wallet.objects.get(paper_trading__user=user,coin="usdt")
-                except:
-                    user_wallet.amount = 0
+                # try :
+                # user_wallet = Wallet.objects.filter(paper_trading__user=user,coin="usdt")
+                # except:
+                #     user_wallet.amount = 0
                 user_paper_trading = Paper_trading.objects.get(user=user)
                 wallet_result=WalletManagment.check("usdt", data['enter_balance'], user_paper_trading)
                 data.update({'enter_balance':data['enter_balance'] + user_paper_trading.enter_balance})
