@@ -409,7 +409,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         return list(Watch_list.objects.all().filter(user=self.user))
 
     def get_top_coins(self, top_coins_count, page):
-        url = f"https://min-api.cryptocompare.com/data/top/mktcapfull?limit={top_coins_count}&tsym=USD&page={page}"
+        url = f"https://min-api.cryptocompare.com/data/top/mktcapfull?limit={top_coins_count}&tsym=USD&page={page}&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
         response = requests.get(url)
         response = response.json()
         return response
