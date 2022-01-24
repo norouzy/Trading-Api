@@ -164,7 +164,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
     def get_multi_price_wallet(self, coins):
         coins = ",".join(coins)
         # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins}&tsyms=USDT"
-        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins}&tsyms=USDT"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins}&tsyms=USDT&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
         response = requests.get(url)
         response = response.json()
         return response
@@ -173,7 +173,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
         coins1 = ",".join(coins["coin1"])
         coins2 = ",".join(coins["coin2"])
         # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins1}&tsyms={coins2}"
-        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
         response = requests.get(url)
         response = response.json()
         return response
@@ -185,7 +185,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
         # return response
         coin1 = coin1.upper()
         coin2 = coin2.upper()
-        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin1}&tsyms={coin2}"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin1}&tsyms={coin2}&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
         response = requests.get(url)
         response = response.json()
 
@@ -306,7 +306,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
     def get_coin_image(self, inCoin):
         try:
             coin = inCoin.upper()
-            url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin}&tsyms=USDT"
+            url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin}&tsyms=USDT&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
             response = requests.get(url)
             response = response.json()
             coinImg = response['DISPLAY'][coin]['USDT']['IMAGEURL']
@@ -478,7 +478,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         coins1 = ",".join(coins["coin1"])
         coins2 = ",".join(coins["coin2"])
         # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins1}&tsyms={coins2}"
-        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
         response = requests.get(url)
         response = response.json()
         return response
