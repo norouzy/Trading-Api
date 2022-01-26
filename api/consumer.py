@@ -126,7 +126,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
                 data = self.set_last_positions(data, position)
 
             await self.send(json.dumps(data))
-            await sleep(5)
+            await sleep(2)
 
     @database_sync_to_async
     def get_watchlist(self):
@@ -397,7 +397,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
                 data = self.set_top_coins(data, coin)
 
             await self.send(json.dumps(data))
-            await sleep(5)
+            await sleep(2)
 
     @database_sync_to_async
     def get_last_positions(self, count):
