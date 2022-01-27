@@ -7,7 +7,7 @@ import datetime
 
 class Position_checker():
 	def requestPrice(coin1,coin2):
-		data = f"https://min-api.cryptocompare.com/data/v2/histohour?fsym={coin1}&tsym={coin2}&limit=1"
+		data = f"https://min-api.cryptocompare.com/data/v2/histohour?fsym={coin1}&tsym={coin2}&limit=1&api_key=f3fd30141d445e2e49a2c3cd84312f2bbd2d67aa508e4dcb2b5ac28201f6b1e7"
 		response = requests.get(data)
 		response = response.json()
 		times = []
@@ -40,7 +40,7 @@ class Position_checker():
 		return myDic
 	
 	def check_price(coin1,coin2):
-		data = f"https://min-api.cryptocompare.com/data/price?fsym={coin1}&tsyms={coin2}"
+		data = f"https://min-api.cryptocompare.com/data/price?fsym={coin1}&tsyms={coin2}&api_key=f3fd30141d445e2e49a2c3cd84312f2bbd2d67aa508e4dcb2b5ac28201f6b1e7"
 		response = requests.get(data)
 		response = response.json()
 		return response[coin2.upper()]
@@ -71,7 +71,7 @@ class Position_checker():
 					if coin == pos.id:
 						timestamp = Position_checker.timeToTimeStamp(pos)
 						timeDifference = prices["time1"] - timestamp
-						if timeDifference >= 0 or True:
+						if timeDifference >= 0:
 							print(prices)
 							if pos.entert_price>= prices["min"] and pos.entert_price<=prices["max"]:
 								if pos.trade_type =="b":
