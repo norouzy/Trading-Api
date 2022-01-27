@@ -20,11 +20,13 @@ urlpatterns = [
 	path('user/watch-list/',watchList_List.as_view()),
 	path('user/watch-list/<int:pk>/',watchList_Details.as_view()),
 	path('user/wallet/',walletList.as_view()),
+	path('user/position/checker',positions_checker),
+	path('user/position-option/checker',options_checker),
+	
 
 	path('positions/', PositionTotal.as_view()),
 	path('user/paper-trading/', PapertradingListView.as_view()),
 	path('user/paper-trading/<int:pk>/', PapertradingDetail.as_view()),
-	path('test/', test, name="test"),
 	path('sokect_test/', socket_test,name="socket_test"),
 	path('home/', homeSocketView, name='socket_home'),
 

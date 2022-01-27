@@ -225,16 +225,25 @@ from extentions.checkPositionOption import Position_option_checker
 from extentions.validateWallet import ValidateWalletCoin
 
 
-def test(request):
-    # results =WalletManagment.check("btc", -112, request.user)
-    # results=WatchList_checker.check("btc","btc",request.user)
-    # results=Position_option_checker.check()
-    # paper_trading = Paper_trading.objects.filter(user__id=request.user.id)
-    # print(paper_trading)
-    # print(request.user.id)
-    # results = ValidateWalletCoin.check("btc", 0.0010643646871144556, request.user.id)
-    results=Position_checker.check()
+# def test(request):
+#     # results =WalletManagment.check("btc", -112, request.user)
+#     # results=WatchList_checker.check("btc","btc",request.user)
+#     # results=Position_option_checker.check()
+#     # paper_trading = Paper_trading.objects.filter(user__id=request.user.id)
+#     # print(paper_trading)
+#     # print(request.user.id)
+#     # results = ValidateWalletCoin.check("btc", 0.0010643646871144556, request.user.id)
+#     results=Position_checker.check()
+#     return HttpResponse(results)
+
+def positions_checker():
+    results = Position_checker.check()
     return HttpResponse(results)
+def options_checker():
+    results = Position_option_checker.check()
+    return HttpResponse(results)
+
+
 
 
 def socket_test(request):
