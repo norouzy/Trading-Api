@@ -236,10 +236,10 @@ from extentions.validateWallet import ValidateWalletCoin
 #     results=Position_checker.check()
 #     return HttpResponse(results)
 
-def positions_checker():
+def positions_checker(request):
     results = Position_checker.check()
     return HttpResponse(results)
-def options_checker():
+def options_checker(request):
     results = Position_option_checker.check()
     return HttpResponse(results)
 
