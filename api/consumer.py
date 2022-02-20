@@ -369,35 +369,34 @@ class HomePageConsumer(AsyncWebsocketConsumer):
                 "top_coins": [],
             }
 
-            # if self.user.is_authenticated:
-            #     data["watchlist"] = []
-            #     watchlist_coin = {"coin1": [], "coin2": []}
-            #     watchlists = await self.get_watchlist()
+            if self.user.is_authenticated:
+                data["watchlist"] = []
+                watchlist_coin = {"coin1": [], "coin2": []}
+                watchlists = await self.get_watchlist()
 
-            #     for watchlist in watchlists:
-            #         watchlist_coin["coin1"].append(watchlist.coin1)
-            #         watchlist_coin["coin2"].append(watchlist.coin2)
+                for watchlist in watchlists:
+                    watchlist_coin["coin1"].append(watchlist.coin1)
+                    watchlist_coin["coin2"].append(watchlist.coin2)
 
-            #     data = self.watchlist(data, watchlists, watchlist_coin)
+                data = self.watchlist(data, watchlists, watchlist_coin)
 
 
 
-            # # GET LAST POSITIONS
-            # last_positions = await self.get_last_positions(last_positions_count)
+            # GET LAST POSITIONS
+            last_positions = await self.get_last_positions(last_positions_count)
 
-            # # GET TOP COINS
-            # top_coins = self.get_top_coins(top_coins_count, top_coins_page)
+            # GET TOP COINS
+            top_coins = self.get_top_coins(top_coins_count, top_coins_page)
 
-            # # SET LAST POSITIONS
-            # for position in last_positions:
-            #     data = self.set_last_positions(data, position)
+            # SET LAST POSITIONS
+            for position in last_positions:
+                data = self.set_last_positions(data, position)
 
-            # # SET TOP COINS
-            # for coin in top_coins['Data']:
-            #     data = self.set_top_coins(data, coin)
+            # SET TOP COINS
+            for coin in top_coins['Data']:
+                data = self.set_top_coins(data, coin)
 
-            # await self.send(json.dumps(data))
-            await self.send("hi")
+            await self.send(json.dumps(data))
             await sleep(1)
 
     @database_sync_to_async
