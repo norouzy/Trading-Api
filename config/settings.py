@@ -116,7 +116,7 @@ ssl_context.check_hostname = False
 
 heroku_redis_ssl_host = {
     # 'address': 'redis://:p55213883d08c65b47a0167580163fa148ac5fd73f09b32d14e22af68c4463b67@ec2-3-210-19-106.compute-1.amazonaws.com:18010',  # The 'rediss' schema denotes a SSL connection.
-    'address': 'URIredis://:p55213883d08c65b47a0167580163fa148ac5fd73f09b32d14e22af68c4463b67@ec2-52-204-98-153.compute-1.amazonaws.com:28160',  # The 'rediss' schema denotes a SSL connection.
+    'address': 'redis://:p55213883d08c65b47a0167580163fa148ac5fd73f09b32d14e22af68c4463b67@ec2-52-204-98-153.compute-1.amazonaws.com:28160',  # The 'rediss' schema denotes a SSL connection.
     'ssl': ssl_context
 
 }

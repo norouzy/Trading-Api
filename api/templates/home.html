@@ -1,10 +1,12 @@
 <html>
 <script>
     let socket = new WebSocket("ws://norouzyteam.herokuapp.com/ws/homeData/");
+    // let socket = new WebSocket("ws://localhost:8000/ws/homeData/");
     socket.onopen = function (e) {
         alert('Connection established');
     };
     socket.onopen = function () {
+         alert('Connection Connection');
         socket.send(JSON.stringify({'tcc': 10, 'page':0 ,'lpc': 10}));
     }
 
@@ -14,7 +16,7 @@
     };
 
     socket.onclose = function (e) {
-        // alert('Connection closed');
+        alert('Connection closed');
     };
 </script>
 
