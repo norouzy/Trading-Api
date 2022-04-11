@@ -66,11 +66,19 @@ class Position_checker():
 			coin1 = coinarray[0]
 			coin2 = coinarray[1]
 			prices=Position_checker.requestPrice(coin1,coin2)
+			print(prices)
+			print(coins)
+			print(positions)
+			print(myDic)
 			for coin in myDic[coins]:
 				for pos in positions:
+					print(coin)
+					print(pos.id)
 					if coin == pos.id:
 						timestamp = Position_checker.timeToTimeStamp(pos)
+
 						timeDifference = prices["time1"] - timestamp
+						print(timeDifference)
 						if timeDifference >= 0:
 							print(prices)
 							if pos.entert_price>= prices["min"] and pos.entert_price<=prices["max"]:
@@ -117,11 +125,15 @@ class Position_checker():
 										if not add_result :
 											print("hi")
 											Position_checker.position_update_status("w", pos)
+					else:
+						print("else")
+						print(coin)
+						print(pos.id)
 								
 																		
 
 	def check():
-		positions = Position.objects.filter(order_type="l")
+		positions = Position.objects.filter(order_type="l",status="w")
 		myDic = Position_checker.makeKeyDic(positions)
 		key = list(myDic)
 		Position_checker.proccess_to_add_and_delete(key,myDic,positions)
