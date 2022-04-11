@@ -97,7 +97,7 @@ class Position_option_checker():
 											
 
 	def check():
-		positions = Position.objects.filter(order_type="l")
+		positions = Position.objects.filter(order_type="l",status="w")
 
 		myDic = Position_option_checker.makeKeyDic(positions)
 		print(myDic)
