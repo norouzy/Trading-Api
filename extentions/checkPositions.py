@@ -4,7 +4,10 @@ import calendar, time
 from .addToWallet import WalletManagment
 from .UpdatePositionOption import UpdatePositionOption
 import datetime
-api_key = "a39ee3e464409f1fd796dc0dac0901575522a2bf02ef989f018ed978baebba02"
+import environ
+environ.Env.read_env()
+api_key = os.environ['api_key_price']
+# api_key = "a39ee3e464409f1fd796dc0dac0901575522a2bf02ef989f018ed978baebba02"
 class Position_checker():
 	def requestPrice(coin1,coin2):
 		data = f"https://min-api.cryptocompare.com/data/v2/histohour?fsym={coin1}&tsym={coin2}&limit=1&api_key={api_key}"
