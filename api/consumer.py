@@ -477,7 +477,6 @@ class HomePageConsumer(AsyncWebsocketConsumer):
     def get_multi_price_watchlist(self, coins):
         coins1 = ",".join(coins["coin1"])
         coins2 = ",".join(coins["coin2"])
-        # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins1}&tsyms={coins2}"
         url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}&api_key={api_key}"
         response = requests.get(url)
         response = response.json()
