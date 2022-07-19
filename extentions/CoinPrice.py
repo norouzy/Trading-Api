@@ -1,5 +1,5 @@
 import requests
-import environ
+import environ,os
 environ.Env.read_env()
 api_key = os.environ['api_key_price']
 # api_key = "a39ee3e464409f1fd796dc0dac0901575522a2bf02ef989f018ed978baebba02"

@@ -6,7 +6,7 @@ from api.models import Watch_list,Wallet, Position,Position_option, Paper_tradin
 from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
-import environ
+import environ,os
 environ.Env.read_env()
 api_key = os.environ['api_key_socket']
 # api_key = "8d4cec2f541324b80257eedb181322a0d452d0654348085318e9f7e7addab01a"
