@@ -62,13 +62,6 @@ class UserPapertrading(BasePermission):
 			)
 
 
-# class is_authenticated(BasePermission):
-# 	def has_permission(self, request, view):
-# 		print("*************************************")
-# 		return bool(
-# 				request.method in SAFE_METHODS
-# 			)
-
 class IsStaffOrReadOnly(BasePermission):
 	def has_permission(self, request, view):
 		return bool(

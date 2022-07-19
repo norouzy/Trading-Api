@@ -9,7 +9,6 @@ from django.contrib.auth import get_user_model
 import environ,os
 environ.Env.read_env()
 api_key = os.environ['api_key_socket']
-# api_key = "8d4cec2f541324b80257eedb181322a0d452d0654348085318e9f7e7addab01a"
 from urllib.parse import urlparse, parse_qs
 
 User = get_user_model()
@@ -21,23 +20,6 @@ class TradeConsumer(AsyncWebsocketConsumer):
 
         # GETTING DATA FROM URL
         self.user = self.scope['user']
-        # parsed_link = urlparse(str(self.scope['query_string'])[2:-1])
-        # captured_value = parse_qs(parsed_link.path)
-        # print(captured_value)
-
-        # try:
-        #     self.coin1 = captured_value["coin"][0]
-        #     self.coin2 = captured_value["to"][0]
-        # except:
-        #     self.coin1 = 'btc'
-        #     self.coin2 = 'usdt'
-
-        # GET LAST POSITIONS COUNT FROM URL
-        # try:
-        #     self.p_count = int(captured_value["p"][0])
-        # except:
-        #     self.p_count = 10
-
         self.group_name='tableData'
         await self.channel_layer.group_add(
             self.group_name,
@@ -166,7 +148,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
 
     def get_multi_price_wallet(self, coins):
         coins = ",".join(coins)
-        # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins}&tsyms=USDT"
+        
         url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins}&tsyms=USDT&api_key={api_key}"
         response = requests.get(url)
         response = response.json()
@@ -175,17 +157,14 @@ class TradeConsumer(AsyncWebsocketConsumer):
     def get_multi_price_watchlist(self, coins):
         coins1 = ",".join(coins["coin1"])
         coins2 = ",".join(coins["coin2"])
-        # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins1}&tsyms={coins2}"
+        
         url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}&api_key={api_key}"
         response = requests.get(url)
         response = response.json()
         return response
 
     def get_coin_info(self, coin1, coin2):
-        # url = f"https://min-api.cryptocompare.com/data/price?fsym={coin1}&tsyms={coin2}"
-        # response = requests.get(url)
-        # response = response.json()
-        # return response
+
         coin1 = coin1.upper()
         coin2 = coin2.upper()
         url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin1}&tsyms={coin2}&api_key={api_key}"

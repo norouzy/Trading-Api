@@ -12,5 +12,3 @@ class ValidateWalletCoin():
 				return "not enough coin"
 		else:
 			return "coin not found in wallet"
-		# except:
-		# 	return "some thing went wrong"

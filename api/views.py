@@ -225,17 +225,6 @@ from extentions.checkPositionOption import Position_option_checker
 from extentions.validateWallet import ValidateWalletCoin
 
 
-# def test(request):
-#     # results =WalletManagment.check("btc", -112, request.user)
-#     # results=WatchList_checker.check("btc","btc",request.user)
-#     # results=Position_option_checker.check()
-#     # paper_trading = Paper_trading.objects.filter(user__id=request.user.id)
-#     # print(paper_trading)
-#     # print(request.user.id)
-#     # results = ValidateWalletCoin.check("btc", 0.0010643646871144556, request.user.id)
-#     results=Position_checker.check()
-#     return HttpResponse(results)
-
 def positions_checker(request):
     results = Position_checker.check()
     return HttpResponse(results)
@@ -245,21 +234,6 @@ def options_checker(request):
 
 
 
-
-def socket_test(request):
-    data = {'stock1': {'name': 'Stock1', 'opening': 45346, 'closing': 1234, 'currentVal': 56},
-            'stock2': {'name': 'Stock2', 'opening': 1889, 'closing': 234235, 'currentVal': 56},
-            'stock3': {'name': 'Stock3', 'opening': 1883, 'closing': 5346, 'currentVal': 56},
-            'stock4': {'name': 'Stock4', 'opening': 1884, 'closing': 56457, 'currentVal': 56},
-            'stock5': {'name': 'Stock5', 'opening': 1881, 'closing': 56457, 'currentVal': 56},
-
-            }
-    context = {'data': data, 'tableheader': ['name', 'opening', 'closing', 'currentVal']}
-    return render(request, 'index.html', context)
-
-
-def homeSocketView(request):
-    return render(request, 'home.html')
 
 
 class coinListView(ListCreateAPIView):
@@ -273,9 +247,6 @@ class coinListView(ListCreateAPIView):
         lastCoins = Coin_list.objects.values_list('coin')
         lastCoins = [coin[0] for coin in lastCoins]
 
-        # GET TOTAL CRYPTO COINS
-        # cg = CoinGeckoAPI()
-        # get_coins = [i['symbol'] for i in cg.get_coins_list()]
         data = []
         get_coins = []
         url = 'https://min-api.cryptocompare.com/data/all/coinlist'

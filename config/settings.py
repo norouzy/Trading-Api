@@ -12,20 +12,13 @@ from pathlib import Path
 import environ
 environ.Env.read_env()
 
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
-# import django
-# django.setup()
-#
-# from django.core.management import call_command
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-o_63(=jef-u98!)t**=wm)68$g!6_^-xy29l)=v$53rkrd37q7'
+
 SECRET_KEY = os.environ['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -56,8 +49,6 @@ INSTALLED_APPS = [
 
     # Cross Headers
     'corsheaders',
-
-    # 'django.contrib.contenttypes.apps.AppConfig',
 ]
 
 MIDDLEWARE = [
@@ -100,28 +91,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
-# ASGI_APPLICATION = "config.routing.application"
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("127.0.0.1", 6379)],
-#         },
-#     },
-# }
-####################################################################################################
-# mammads redis
 import ssl
 
 ssl_context = ssl.SSLContext()
 ssl_context.check_hostname = False
 
 heroku_redis_ssl_host = {
-    # 'address': 'redis://:p55213883d08c65b47a0167580163fa148ac5fd73f09b32d14e22af68c4463b67@ec2-3-210-19-106.compute-1.amazonaws.com:18010',  # The 'rediss' schema denotes a SSL connection.
-    # 'address': 'rediss://default:AVNS_DyF1Suc0K2B2aEl@redis-3701f197-cupbest-6379.aivencloud.com:23826',  # The 'rediss' schema denotes a SSL connection.
-    'address': 'rediss://default:AVNS_ll1SZlQcLSKCTqIZJTm@redis-29750624-ramintaaroo-34b9.aivencloud.com:21000',  # The 'rediss' schema denotes a SSL connection.
-    # 'address': 'redis-14088.c1.ap-southeast-1-1.ec2.cloud.redislabs.com:14088',  # The 'rediss' schema denotes a SSL connection.
+    'address': os.environ['redis'],  # The 'rediss' schema denotes a SSL connection.
     'ssl': ssl_context
 
 }
@@ -134,7 +111,6 @@ CHANNEL_LAYERS = {
         }
     },
 }
-#################################################################################################################
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -146,39 +122,6 @@ DATABASES = {
 }
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'dch0f5uef62aoc',
-#         'USER': 'mngoilajihazhg',
-#         'PASSWORD': 'd1b536269ee7a9b3dd15e180f5862c09029e75a4f043d119ea9f14ec6247bc75',
-#         'HOST': 'ec2-54-147-203-50.compute-1.amazonaws.com',
-#         'PORT': '5432'
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'd49noiaur1s5kc',
-#         'USER': 'lqdqkbcqmgbdhv',
-#         'PASSWORD': '4d9af77fa1728e3372efab0e5b5368a3fc5bdbd44ced1add7e994cd31c9c8232',
-#         'HOST': 'ec2-3-227-15-75.compute-1.amazonaws.com',
-#         'PORT': '5432'
-#     }
-# }
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'd11aj9ec8sae3d',
-#         'USER': 'xamdizcyolyctj',
-#         'PASSWORD': 'a92d8e8dcd4682ffee09491fa04c3f3e944268fa447e8f18a0465dd69e0b997f',
-#         'HOST': 'ec2-54-146-73-98.compute-1.amazonaws.com',
-#         'PORT': '5432'
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

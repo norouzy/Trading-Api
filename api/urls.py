@@ -27,8 +27,6 @@ urlpatterns = [
 	path('positions/', PositionTotal.as_view()),
 	path('user/paper-trading/', PapertradingListView.as_view()),
 	path('user/paper-trading/<int:pk>/', PapertradingDetail.as_view()),
-	path('sokect_test/', socket_test,name="socket_test"),
-	path('home/', homeSocketView, name='socket_home'),
 
 	path('coinlist/', coinListView.as_view()),
 
