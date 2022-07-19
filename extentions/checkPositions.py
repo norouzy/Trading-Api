@@ -4,10 +4,10 @@ import calendar, time
 from .addToWallet import WalletManagment
 from .UpdatePositionOption import UpdatePositionOption
 import datetime
-
+api_key = "a39ee3e464409f1fd796dc0dac0901575522a2bf02ef989f018ed978baebba02"
 class Position_checker():
 	def requestPrice(coin1,coin2):
-		data = f"https://min-api.cryptocompare.com/data/v2/histohour?fsym={coin1}&tsym={coin2}&limit=1&api_key=f3fd30141d445e2e49a2c3cd84312f2bbd2d67aa508e4dcb2b5ac28201f6b1e7"
+		data = f"https://min-api.cryptocompare.com/data/v2/histohour?fsym={coin1}&tsym={coin2}&limit=1&api_key={api_key}"
 		response = requests.get(data)
 		response = response.json()
 		times = []
@@ -40,7 +40,7 @@ class Position_checker():
 		return myDic
 	
 	def check_price(coin1,coin2):
-		data = f"https://min-api.cryptocompare.com/data/price?fsym={coin1}&tsyms={coin2}&api_key=f3fd30141d445e2e49a2c3cd84312f2bbd2d67aa508e4dcb2b5ac28201f6b1e7"
+		data = f"https://min-api.cryptocompare.com/data/price?fsym={coin1}&tsyms={coin2}&api_key={api_key}"
 		response = requests.get(data)
 		response = response.json()
 		return response[coin2.upper()]

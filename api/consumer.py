@@ -6,7 +6,7 @@ from api.models import Watch_list,Wallet, Position,Position_option, Paper_tradin
 from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
-
+api_key = "8d4cec2f541324b80257eedb181322a0d452d0654348085318e9f7e7addab01a"
 from urllib.parse import urlparse, parse_qs
 
 User = get_user_model()
@@ -164,7 +164,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
     def get_multi_price_wallet(self, coins):
         coins = ",".join(coins)
         # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins}&tsyms=USDT"
-        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins}&tsyms=USDT&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins}&tsyms=USDT&api_key={api_key}"
         response = requests.get(url)
         response = response.json()
         return response
@@ -173,7 +173,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
         coins1 = ",".join(coins["coin1"])
         coins2 = ",".join(coins["coin2"])
         # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins1}&tsyms={coins2}"
-        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}&api_key={api_key}"
         response = requests.get(url)
         response = response.json()
         return response
@@ -185,7 +185,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
         # return response
         coin1 = coin1.upper()
         coin2 = coin2.upper()
-        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin1}&tsyms={coin2}&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin1}&tsyms={coin2}&api_key={api_key}"
         response = requests.get(url)
         response = response.json()
 
@@ -306,7 +306,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
     def get_coin_image(self, inCoin):
         try:
             coin = inCoin.upper()
-            url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin}&tsyms=USDT&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
+            url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coin}&tsyms=USDT&api_key={api_key}"
             response = requests.get(url)
             response = response.json()
             coinImg = response['DISPLAY'][coin]['USDT']['IMAGEURL']
@@ -409,7 +409,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         return list(Watch_list.objects.all().filter(user=self.user))
 
     def get_top_coins(self, top_coins_count, page):
-        url = f"https://min-api.cryptocompare.com/data/top/mktcapfull?limit={top_coins_count}&tsym=USD&page={page}&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
+        url = f"https://min-api.cryptocompare.com/data/top/mktcapfull?limit={top_coins_count}&tsym=USD&page={page}&api_key={api_key}"
         response = requests.get(url)
         response = response.json()
         return response
@@ -478,7 +478,7 @@ class HomePageConsumer(AsyncWebsocketConsumer):
         coins1 = ",".join(coins["coin1"])
         coins2 = ",".join(coins["coin2"])
         # url = f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={coins1}&tsyms={coins2}"
-        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}&api_key=fc15f2257d810042d8185d561fa06b2ab2f22d250c7b95a7b682a9fbd21dbb78"
+        url = f"https://min-api.cryptocompare.com/data/pricemultifull?fsyms={coins1}&tsyms={coins2}&api_key={api_key}"
         response = requests.get(url)
         response = response.json()
         return response
