@@ -1,11 +1,11 @@
 # trading view
 Django rest-framework App 
 
-it's an api for trading websites like tarding view
+It's an api for trading websites like tarding view
 
-[postman link to know how work with apis](https://www.getpostman.com/collections/b664690060c634638fe5)
+[Postman link to know how work with apis](https://www.getpostman.com/collections/b664690060c634638fe5)
 
-[apis deployed on heroku](https://norouzyteam.herokuapp.com
+[Apis deployed on heroku](https://norouzyteam.herokuapp.com
 )
 
 [website link](https://trading-app-five.vercel.app/)
