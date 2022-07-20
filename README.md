@@ -8,7 +8,7 @@ It's an api for trading websites like tarding view
 [Apis deployed on heroku](https://norouzyteam.herokuapp.com
 )
 
-[website link](https://trading-app-five.vercel.app/)
+[website link](https://trading-app-five.vercel.app/) use VPN to open site:)
 
 # Options
 * Trade as a Market or Limit type
