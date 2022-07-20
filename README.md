@@ -1,7 +1,7 @@
 # trading view
 Django rest-framework App 
 
-it's an api for trading like tarding view
+it's an api for trading websites like tarding view
 
 [postman link to know how work with apis](https://www.getpostman.com/collections/b664690060c634638fe5)
 
@@ -16,7 +16,7 @@ it's an api for trading like tarding view
 * User Watch-list
 * User wallet
 * User paper-tading
-* Shw real-time market price (Use WebSocket)
+* Show real-time market price (Use WebSocket)
 # images
 
 
