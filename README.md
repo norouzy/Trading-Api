@@ -10,6 +10,16 @@ it's an api for trading like tarding view
 
 [website link](https://trading-app-five.vercel.app/)
 
+# Options
+* Trade as a Market or Limit type
+* Set Position option (stop loss or take profit)
+* User Watch-list
+* User wallet
+* User paper-tading
+* Shw real-time market price (Use WebSocket)
+# images
+
+
 <details>
   <summary>Home</summary>
   <img src="https://user-images.githubusercontent.com/77892796/179959284-2f4afab2-c3e3-458b-958c-e95a0cc8df94.png" name="image-name">
