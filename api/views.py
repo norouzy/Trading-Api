@@ -1,30 +1,17 @@
 import requests
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.db import IntegrityError
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from extentions.addToWallet import WalletManagment
-
-from pycoingecko import CoinGeckoAPI
-from rest_framework import status
-from rest_framework.parsers import JSONParser
-from rest_framework import status
-
 
 from .serializers import *
+from .permissions import *
+from .models import Position, Coin_list
 
-from rest_framework.views import APIView
-
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView, \
-    RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, CreateAPIView, ListAPIView, UpdateAPIView
-from rest_framework import viewsets
-from rest_framework import serializers
+from rest_framework import status, viewsets, serializers
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, \
+    RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, CreateAPIView, ListAPIView
 from rest_framework.response import Response
 
-from .permissions import *
 
-from .models import Position, Coin_list
 
 User = get_user_model()
 
@@ -48,6 +35,7 @@ class PositionList(ListAPIView):
         user = self.request.user
         query = Position.objects.filter(paper_trading__user__id=user.id)
         return query
+
 
 class PositionCloseUpdate(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionCloseSerializer
