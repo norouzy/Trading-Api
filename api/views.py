@@ -11,6 +11,9 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, \
     RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, CreateAPIView, ListAPIView
 from rest_framework.response import Response
 
+from extentions.addToWallet import WalletManagment
+from extentions.checkPositions import Position_checker
+from extentions.checkPositionOption import Position_option_checker
 
 
 User = get_user_model()
@@ -30,7 +33,8 @@ class UserDetail(RetrieveUpdateAPIView):
 
 class PositionList(ListAPIView):
     serializer_class = PositionSerializer
-    permission_classes = (Is_Authenticated,IsUser)
+    permission_classes = (Is_Authenticated, IsUser)
+
     def get_queryset(self):
         user = self.request.user
         query = Position.objects.filter(paper_trading__user__id=user.id)
@@ -39,7 +43,7 @@ class PositionList(ListAPIView):
 
 class PositionCloseUpdate(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionCloseSerializer
-    permission_classes = (Is_Authenticated,UserPosition,)
+    permission_classes = (Is_Authenticated, UserPosition,)
 
     def get_queryset(self):
         user = self.request.user
@@ -74,7 +78,7 @@ class PositionTotal(ListAPIView):
 
 class PositionOptionCreate(ListCreateAPIView):
     serializer_class = PositionOptionCreateSerializer
-    permission_classes = (Is_Authenticated,UserPositionOption,)
+    permission_classes = (Is_Authenticated, UserPositionOption,)
 
     def get_queryset(self):
         user = self.request.user
@@ -95,7 +99,7 @@ class PositionOptionCreate(ListCreateAPIView):
 
 class PositionOptionUpdate(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionOptionUpdateSerializer
-    permission_classes = (Is_Authenticated,UserPositionOption,)
+    permission_classes = (Is_Authenticated, UserPositionOption,)
     lookup_field = "in_position"
 
     def get_queryset(self):
@@ -103,6 +107,7 @@ class PositionOptionUpdate(RetrieveUpdateDestroyAPIView):
         position_id = self.kwargs["in_position"]
         query = Position_option.objects.filter(in_position=position_id, in_position__paper_trading__user=user)
         return query
+
     def delete(self, request, *args, **kwargs):
         user = self.request.user
         position_id = self.kwargs["in_position"]
@@ -115,7 +120,7 @@ class PositionOptionUpdate(RetrieveUpdateDestroyAPIView):
 
 class PositionOptionClose(RetrieveUpdateDestroyAPIView):
     serializer_class = PositionOptionCloseSerializer
-    permission_classes = (Is_Authenticated,UserPositionOption,)
+    permission_classes = (Is_Authenticated, UserPositionOption,)
     lookup_field = "in_position"
 
     def get_queryset(self):
@@ -141,7 +146,7 @@ class PapertradingViewSet(viewsets.ModelViewSet):
 
 class PapertradingListView(ListCreateAPIView):
     serializer_class = CreatePaperTradingSerializer
-    permission_classes = (Is_Authenticated,IsUser,)
+    permission_classes = (Is_Authenticated, IsUser,)
 
     def get_queryset(self):
         user = self.request.user
@@ -161,7 +166,7 @@ class PapertradingListView(ListCreateAPIView):
 
 class PapertradingDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = UpdatePaperTradingSerializer
-    permission_classes = (Is_Authenticated,UserPapertrading,)
+    permission_classes = (Is_Authenticated, UserPapertrading,)
 
     def get_queryset(self):
         user = self.request.user
@@ -171,7 +176,7 @@ class PapertradingDetail(RetrieveUpdateDestroyAPIView):
 
 class watchList_List(ListCreateAPIView):
     serializer_class = WatchListSerializer
-    permission_classes = (Is_Authenticated,IsUser,)
+    permission_classes = (Is_Authenticated, IsUser,)
 
     def get_queryset(self):
         user = self.request.user
@@ -188,7 +193,7 @@ class watchList_List(ListCreateAPIView):
 
 class watchList_Details(RetrieveDestroyAPIView):
     serializer_class = WatchListSerializer
-    permission_classes = (Is_Authenticated,UserWatchList,)
+    permission_classes = (Is_Authenticated, UserWatchList,)
 
     def get_queryset(self):
         user = self.request.user
@@ -198,7 +203,7 @@ class watchList_Details(RetrieveDestroyAPIView):
 
 class walletList(ListAPIView):
     serializer_class = WalletSerializer
-    permission_classes = (Is_Authenticated,IsUser,)
+    permission_classes = (Is_Authenticated, IsUser,)
 
     def get_queryset(self):
         user = self.request.user
@@ -206,29 +211,21 @@ class walletList(ListAPIView):
         return query
 
 
-from extentions.watchList import WatchList_checker
-from extentions.addToWallet import WalletManagment
-from extentions.checkPositions import Position_checker
-from extentions.checkPositionOption import Position_option_checker
-from extentions.validateWallet import ValidateWalletCoin
-
 
 def positions_checker(request):
     results = Position_checker.check()
     return HttpResponse(results)
+
+
 def options_checker(request):
     results = Position_option_checker.check()
     return HttpResponse(results)
-
-
-
 
 
 class coinListView(ListCreateAPIView):
     serializer_class = CoinSerializer
     permission_classes = (IsSuperUserOrReadOnly,)
     queryset = Coin_list.objects.all()
-
 
     def create(self, request, *args, **kwargs):
         # GET LAST COINS IN DB
@@ -247,8 +244,8 @@ class coinListView(ListCreateAPIView):
 
         # REMOVE DUPLICATED AND EXISTED COINS
         for elem in get_coins:
-            if elem not in lastCoins and len(elem)<20:
-                data.append({'coin':elem})
+            if elem not in lastCoins and len(elem) < 20:
+                data.append({'coin': elem})
 
         # SEND DATA TO SERIALIZER
         serializer = self.get_serializer(data=data, many=True)
