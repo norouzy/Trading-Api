@@ -66,18 +66,6 @@ Install the project dependencies:
 
     pip install -r requirements.txt
 
-create a postgres db and add the credentials to settings.py
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'db_name',
-            'USER': 'name',
-            'PASSWORD': '',
-            'HOST': 'localhost',
-            'PORT': '',
-        }
-    }
     
 then run
 
