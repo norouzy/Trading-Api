@@ -1,16 +1,15 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
-import json,requests
-from asyncio import sleep
-import asyncio
-from api.models import Watch_list,Wallet, Position,Position_option, Paper_trading
-from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
+
 from django.contrib.auth import get_user_model
-import environ,os
+from asyncio import sleep
+from api.models import Watch_list,Wallet, Position,Position_option, Paper_trading
+
+import json, requests, environ, os
+
+
 environ.Env.read_env()
 api_key = os.environ['api_key_socket']
-from urllib.parse import urlparse, parse_qs
-
 User = get_user_model()
 
 

@@ -1,5 +1,7 @@
 from api.models import Watch_list
 from .checkCoin import Coinlist
+
+
 class WatchList_checker():
 	def check(coin1,coin2,user):
 		if not Coinlist.check(coin1) and not Coinlist.check(coin2) \

@@ -1,5 +1,6 @@
 from api.models import Position,Position_option
 
+
 class UpdatePositionOption():
 	def check(position,type_position):
 		try:

@@ -1,12 +1,16 @@
 from api.models import Position, Position_option
-import requests
-import calendar, time
+
 from .addToWallet import WalletManagment
 from .UpdatePositionOption import UpdatePositionOption
-import datetime
-import environ,os
+
+import requests, environ, os
+import calendar, datetime, time
+
+
 environ.Env.read_env()
 api_key = os.environ['api_key_price']
+
+
 class Position_checker():
 	def requestPrice(coin1,coin2):
 		data = f"https://min-api.cryptocompare.com/data/v2/histohour?fsym={coin1}&tsym={coin2}&limit=1&api_key={api_key}"
