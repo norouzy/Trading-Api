@@ -17,6 +17,7 @@ It's an api for trading websites like tarding view
 * User wallet
 * User paper-tading
 * Show real-time market price (Use WebSocket)
+* JWT authentication
 # images
 
 
@@ -46,5 +47,60 @@ It's an api for trading websites like tarding view
   <img src="https://user-images.githubusercontent.com/77892796/179962614-6ef23f75-9701-494d-8afb-1a91c080a152.png" name="image-name">
   <img src="https://user-images.githubusercontent.com/77892796/179962620-a949a5e9-ddd3-4df2-92ad-fee68f8f7d1f.png" name="image-name">
 </details>
+
+
+# Getting Started
+To use this template to start your own project:
+
+clone the project
+
+    git clone https://github.com/norouzy/Trading-Api.git
+    
+create and start a a virtual environment
+
+    virtualenv env
+
+    source env/bin/activate
+
+Install the project dependencies:
+
+    pip install -r requirements.txt
+
+create a postgres db and add the credentials to settings.py
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'db_name',
+            'USER': 'name',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+    
+then run
+
+    python manage.py migrate
+
+create admin account
+
+    python manage.py createsuperuser
+      
+then
+
+    python manage.py makemigrations
+
+to makemigrations for the app
+
+then again run
+
+    python manage.py migrate
+
+to start the development server
+
+    python manage.py runserver
+
+and open localhost:8000 on your browser to view the app.
 
 
