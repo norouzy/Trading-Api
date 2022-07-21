@@ -1,8 +1,5 @@
 from django.db import models
-
-# Create your models here.
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 
 User = get_user_model()
 
@@ -22,11 +19,13 @@ class Paper_trading(models.Model):
     def __str__(self):
         return str(self.user)
 
+
 class Coin_list(models.Model):
     coin = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.coin
+
 
 class Wallet(models.Model):
     paper_trading = models.ForeignKey(Paper_trading, on_delete=models.CASCADE, related_name="Wallet", verbose_name="wallet")
@@ -36,9 +35,9 @@ class Wallet(models.Model):
 
 class Watch_list(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user", verbose_name="user")
-    # coin = models.ForeignKey(Coin_list, models.CASCADE, related_name="Wcoin")
     coin1 = models.CharField(max_length=20)
     coin2 = models.CharField(max_length=20)
+
 
 class Position(models.Model):
     TRADE_TYPE_CHOISES = (
