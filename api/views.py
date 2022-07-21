@@ -20,18 +20,30 @@ User = get_user_model()
 
 
 class UserList(ListCreateAPIView):
+
+    """
+        Concrete view for listing and create users .
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsSuperUser,)
 
 
 class UserDetail(RetrieveUpdateAPIView):
+
+    """
+        Concrete view for read, update or delete specific user .
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsUser,)
 
 
 class PositionList(ListAPIView):
+
+    """
+        Concrete view for listing positions.
+    """
     serializer_class = PositionSerializer
     permission_classes = (Is_Authenticated, IsUser)
 
@@ -42,6 +54,11 @@ class PositionList(ListAPIView):
 
 
 class PositionCloseUpdate(RetrieveUpdateDestroyAPIView):
+
+    """
+        Concrete view for read, delete or update(reaching to price or closed) positions.
+    """
+
     serializer_class = PositionCloseSerializer
     permission_classes = (Is_Authenticated, UserPosition,)
 
@@ -61,6 +78,11 @@ class PositionCloseUpdate(RetrieveUpdateDestroyAPIView):
 
 
 class PositionCreate(CreateAPIView):
+
+    """
+        Concrete view for create a position.
+    """
+
     serializer_class = PositionAddSerializer
     permission_classes = (Is_Authenticated,)
 
@@ -77,6 +99,11 @@ class PositionTotal(ListAPIView):
 
 
 class PositionOptionCreate(ListCreateAPIView):
+
+    """
+        Concrete view for listing and create a position option.
+    """
+
     serializer_class = PositionOptionCreateSerializer
     permission_classes = (Is_Authenticated, UserPositionOption,)
 
@@ -98,6 +125,11 @@ class PositionOptionCreate(ListCreateAPIView):
 
 
 class PositionOptionUpdate(RetrieveUpdateDestroyAPIView):
+
+    """
+        Concrete view for read, update or delete position option .
+    """
+
     serializer_class = PositionOptionUpdateSerializer
     permission_classes = (Is_Authenticated, UserPositionOption,)
     lookup_field = "in_position"
@@ -145,6 +177,10 @@ class PapertradingViewSet(viewsets.ModelViewSet):
 
 
 class PapertradingListView(ListCreateAPIView):
+
+    """
+        Concrete view for listing and create user paper trading.
+    """
     serializer_class = CreatePaperTradingSerializer
     permission_classes = (Is_Authenticated, IsUser,)
 
@@ -165,6 +201,10 @@ class PapertradingListView(ListCreateAPIView):
 
 
 class PapertradingDetail(RetrieveUpdateDestroyAPIView):
+
+    """
+        Concrete view for read, update or delete user paper trading.
+    """
     serializer_class = UpdatePaperTradingSerializer
     permission_classes = (Is_Authenticated, UserPapertrading,)
 
@@ -175,6 +215,10 @@ class PapertradingDetail(RetrieveUpdateDestroyAPIView):
 
 
 class watchList_List(ListCreateAPIView):
+
+    """
+        Concrete view for listing and create user watchlist.
+    """
     serializer_class = WatchListSerializer
     permission_classes = (Is_Authenticated, IsUser,)
 
@@ -192,6 +236,10 @@ class watchList_List(ListCreateAPIView):
 
 
 class watchList_Details(RetrieveDestroyAPIView):
+
+    """
+        Concrete view for read or delete user watchlist.
+    """
     serializer_class = WatchListSerializer
     permission_classes = (Is_Authenticated, UserWatchList,)
 
@@ -202,6 +250,11 @@ class watchList_Details(RetrieveDestroyAPIView):
 
 
 class walletList(ListAPIView):
+
+    """
+        Concrete view for listing user wallets.
+    """
+
     serializer_class = WalletSerializer
     permission_classes = (Is_Authenticated, IsUser,)
 
@@ -213,6 +266,11 @@ class walletList(ListAPIView):
 
 
 def positions_checker(request):
+
+    """
+        Concrete view function for checking positions to reach .
+    """
+
     results = Position_checker.check()
     return HttpResponse(results)
 
@@ -223,6 +281,11 @@ def options_checker(request):
 
 
 class coinListView(ListCreateAPIView):
+
+    """
+        Concrete view for listing coins and update them.
+    """
+
     serializer_class = CoinSerializer
     permission_classes = (IsSuperUserOrReadOnly,)
     queryset = Coin_list.objects.all()
