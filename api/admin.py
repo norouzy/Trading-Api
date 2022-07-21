@@ -1,8 +1,6 @@
-#.........
-from django.contrib.auth.models import User
 from django.contrib import admin
 from .models import *
-# Register your models here.
+
 
 class positonAdmin(admin.ModelAdmin):
 	list_display = (
@@ -38,7 +36,6 @@ class paper_tradingAdmin(admin.ModelAdmin):
 		'enter_date'
 		)
 admin.site.register(Paper_trading,paper_tradingAdmin)
-
 
 
 class watchListAdmin(admin.ModelAdmin):
