@@ -1,4 +1,4 @@
-# Trading view
+# Trading View
 Django rest-framework App 
 
 It's an api for trading websites like tarding view
